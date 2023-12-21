@@ -8,7 +8,7 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"myServer/model"
+	"myServer/graph/model"
 	"strconv"
 	"sync"
 	"sync/atomic"

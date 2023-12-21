@@ -7,7 +7,7 @@ package graph
 import (
 	"context"
 	"fmt"
-	"myServer/model"
+	"myServer/graph/model"
 )
 
 // CreateTodo is the resolver for the createTodo field.

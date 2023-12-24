@@ -7,7 +7,8 @@ package graph
 import (
 	"context"
 	"fmt"
-	"myServer/graph/model"
+
+	"github.com/jepbura/go-server/graph/model"
 )
 
 // CreateTodo is the resolver for the createTodo field.

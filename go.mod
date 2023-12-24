@@ -1,4 +1,4 @@
-module myServer
+module github.com/jepbura/go-server
 
 go 1.21.5
 

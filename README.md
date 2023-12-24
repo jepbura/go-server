@@ -1,1 +1,1 @@
-# go-docker-graphql-mongodb-websocket
+# gqlgen-docker-graphql-mongodb-websocket

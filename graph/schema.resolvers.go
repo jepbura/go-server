@@ -6,28 +6,31 @@ package graph
 
 import (
 	"context"
-	"crypto/rand"
 	"fmt"
-	"math/big"
+	"math/rand"
 
+	"github.com/jepbura/go-server/controller"
 	"github.com/jepbura/go-server/graph/model"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	randNumber, _ := rand.Int(rand.Reader, big.NewInt(100))
-	todo := &model.Todo{
-		Text: input.Text,
-		ID:   fmt.Sprintf("T%d", randNumber),
-		User: &model.User{ID: input.UserID, Name: "user " + input.UserID},
+// CreateBook is the resolver for the createBook field.
+func (r *mutationResolver) CreateBook(ctx context.Context, input model.NewBook) (*model.Book, error) {
+	book := &model.Book{
+		ID:    fmt.Sprintf("T%d", rand.Int()),
+		Title: input.Title,
+		Author: &model.User{
+			ID:   input.UserID,
+			Name: input.Name,
+		},
 	}
-	r.todos = append(r.todos, todo)
-	return todo, nil
+	controller.Save(book)
+	return book, nil
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	return r.todos, nil
+// Books is the resolver for the books field.
+func (r *queryResolver) Books(ctx context.Context) ([]*model.Book, error) {
+	books := controller.FindAll()
+	return books, nil
 }
 
 // Mutation returns MutationResolver implementation.

@@ -11,7 +11,7 @@ import (
 	"github.com/jepbura/go-server/graph"
 )
 
-const defaultPort = "8080"
+const defaultPort = "8778"
 
 func main() {
 	port := os.Getenv("PORT")

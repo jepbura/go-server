@@ -5,11 +5,41 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/jepbura/go-server/constant"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
+
+// GraphQLControllerTarget is parameter object for geting all GraphQLController's dependency
+type DatabaseTarget struct {
+	fx.In
+	GraphiQLEnable bool   `name:"graphiql_enable"`
+	MONGO_URL      string `name:"MONGO_URL"`
+	Lc             fx.Lifecycle
+	Logger         *zap.Logger
+}
+
+func GetConnection(target DatabaseTarget) (*mongo.Client, error) {
+	// Get Client, Context, CalcelFunc and err from connect method.
+
+	MONGO_URL := target.MONGO_URL
+	if MONGO_URL == "" {
+		MONGO_URL = string(constant.MONGO_URL)
+	}
+	client, ctx, cancel, err := Connect(MONGO_URL)
+	if err != nil {
+		panic(err)
+	}
+	// Release resource when the main, function is returned.
+	defer Close(client, ctx, cancel)
+	// Ping mongoDB with Ping method
+	ping(client, ctx)
+	return client, nil
+}
 
 // This method closes mongoDB connection and cancel context.
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
@@ -41,18 +71,6 @@ func ping(client *mongo.Client, ctx context.Context) error {
 	}
 	fmt.Println("connected successfully")
 	return nil
-}
-
-func GetConnection() {
-	// Get Client, Context, CalcelFunc and err from connect method.
-	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
-	if err != nil {
-		panic(err)
-	}
-	// Release resource when the main, function is returned.
-	defer Close(client, ctx, cancel)
-	// Ping mongoDB with Ping method
-	ping(client, ctx)
 }
 
 func SaveOne(client *mongo.Client, ctx context.Context, dataBase, col string, doc interface{}) (*mongo.InsertOneResult, error) {

@@ -4,28 +4,33 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jepbura/go-server/config"
+	"github.com/jepbura/go-server/module"
 	"github.com/jepbura/go-server/server"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
 )
 
 func main() {
 
+	// app := fx.New(
+	// 	fx.Provide(
+	// 		config.EnvInit, // Add this line
+	// 		func() *zap.Logger {
+	// 			// Initialize and return a *zap.Logger instance here
+	// 			// Example:
+	// 			logger, err := zap.NewProduction()
+	// 			if err != nil {
+	// 				fmt.Println("Error initializing logger:", err)
+	// 			}
+	// 			return logger
+	// 		},
+	// 	),
+	// 	fx.Invoke(server.RunServer),
+	// )
+
 	app := fx.New(
-		fx.Provide(
-			config.EnvInit, // Add this line
-			func() *zap.Logger {
-				// Initialize and return a *zap.Logger instance here
-				// Example:
-				logger, err := zap.NewProduction()
-				if err != nil {
-					fmt.Println("Error initializing logger:", err)
-				}
-				return logger
-			},
-		),
+		module.Module,
 		fx.Invoke(server.RunServer),
+		// fx.Invoke(database.GetConnection),
 	)
 
 	app.Run()

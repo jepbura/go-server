@@ -8,14 +8,13 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/jepbura/go-server/constant"
-	"github.com/jepbura/go-server/database"
 	"github.com/jepbura/go-server/graph"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
 
 // Target is parameters to get all mux's dependencies
-type Target struct {
+type ServerTarget struct {
 	fx.In
 	Environment string `name:"env"`
 	Port        string `name:"port"`
@@ -24,14 +23,12 @@ type Target struct {
 }
 
 // New is constructor to create Mux server on specific addr and port
-func RunServer(target Target) {
-	fmt.Println("GlobalResult:", target.Port)
+func RunServer(target ServerTarget) {
+	fmt.Println("Port:", target.Port)
 	port := target.Port
 	if port == "" {
 		port = string(constant.Port)
 	}
-
-	database.GetConnection()
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 

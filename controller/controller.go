@@ -3,13 +3,9 @@ package controller
 import (
 	"log"
 
+	"github.com/jepbura/go-server/constant"
 	"github.com/jepbura/go-server/database"
 	"github.com/jepbura/go-server/graph/model"
-)
-
-const (
-	DB  = "apiServer"
-	COL = "bookInfo"
 )
 
 type ControllerB interface {
@@ -25,7 +21,7 @@ func Save(document *model.Book) interface{} {
 	}
 	// Free the resource when mainn dunction is  returned
 	defer database.Close(client, ctx, cancel)
-	cursor, err := database.SaveOne(client, ctx, DB, COL, document)
+	cursor, err := database.SaveOne(client, ctx, string(constant.DB), string(constant.COL), document)
 	// handle the errors.
 	if err != nil {
 		panic(err)
@@ -35,6 +31,7 @@ func Save(document *model.Book) interface{} {
 
 func FindAll() []*model.Book {
 	// Get Client, Context, CalcelFunc and err from connect method.
+
 	client, ctx, cancel, err := database.Connect("mongodb://localhost:27017")
 	if err != nil {
 		panic(err)
@@ -42,7 +39,7 @@ func FindAll() []*model.Book {
 	// Free the resource when mainn dunction is  returned
 	defer database.Close(client, ctx, cancel)
 
-	cursor, err := database.Query(client, ctx, DB, COL)
+	cursor, err := database.Query(client, ctx, string(constant.DB), string(constant.COL))
 	// handle the errors.
 	if err != nil {
 		panic(err)

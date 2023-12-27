@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"fmt"
@@ -7,23 +7,25 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/jepbura/go-server/config"
 	"github.com/jepbura/go-server/constant"
 	"github.com/jepbura/go-server/database"
 	"github.com/jepbura/go-server/graph"
+	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
-func main() {
-	// Environment variables initialization
-	GlobalResult, err := config.EnvInit()
-	if err != nil {
-		return
-	}
+// Target is parameters to get all mux's dependencies
+type Target struct {
+	fx.In
+	Port   string `name:"port"`
+	Lc     fx.Lifecycle
+	Logger *zap.Logger
+}
 
-	fmt.Println("GlobalResult:", GlobalResult.Port)
-	fmt.Println("err:", err)
-
-	port := GlobalResult.Port
+// New is constructor to create Mux server on specific addr and port
+func RunServer(target Target) {
+	fmt.Println("GlobalResult:", target.Port)
+	port := target.Port
 	if port == "" {
 		port = string(constant.Port)
 	}
@@ -37,4 +39,5 @@ func main() {
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+	// target.Logger.Info("Stopping HTTPS server.")
 }

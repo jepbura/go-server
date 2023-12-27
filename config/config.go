@@ -11,7 +11,7 @@ import (
 	"go.uber.org/fx"
 )
 
-var GlobalResult Result
+// var GlobalResult Result
 
 // Result is return results for constants
 type Result struct {

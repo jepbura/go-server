@@ -7,6 +7,7 @@ require (
 	github.com/vektah/gqlparser/v2 v2.5.10
 	go.mongodb.org/mongo-driver v1.13.1
 	go.uber.org/fx v1.20.1
+	go.uber.org/zap v1.23.0
 )
 
 require (
@@ -30,7 +31,6 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/dig v1.17.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
-	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	golang.org/x/mod v0.10.0 // indirect
 	golang.org/x/sync v0.2.0 // indirect

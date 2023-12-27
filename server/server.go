@@ -17,9 +17,10 @@ import (
 // Target is parameters to get all mux's dependencies
 type Target struct {
 	fx.In
-	Port   string `name:"port"`
-	Lc     fx.Lifecycle
-	Logger *zap.Logger
+	Environment string `name:"env"`
+	Port        string `name:"port"`
+	Lc          fx.Lifecycle
+	Logger      *zap.Logger
 }
 
 // New is constructor to create Mux server on specific addr and port

@@ -1,22 +1,31 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/jepbura/go-server/config"
+	"github.com/jepbura/go-server/constant"
 	"github.com/jepbura/go-server/database"
 	"github.com/jepbura/go-server/graph"
 )
 
-const defaultPort = "8778"
-
 func main() {
-	port := os.Getenv("PORT")
+	// Environment variables initialization
+	GlobalResult, err := config.EnvInit()
+	if err != nil {
+		return
+	}
+
+	fmt.Println("GlobalResult:", GlobalResult.Port)
+	fmt.Println("err:", err)
+
+	port := GlobalResult.Port
 	if port == "" {
-		port = defaultPort
+		port = string(constant.Port)
 	}
 
 	database.GetConnection()

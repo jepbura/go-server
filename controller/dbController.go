@@ -6,11 +6,21 @@ import (
 	"github.com/jepbura/go-server/constant"
 	"github.com/jepbura/go-server/database"
 	"github.com/jepbura/go-server/graph/model"
+	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
-type ControllerB interface {
+type DB_Controller interface {
 	Save(book *model.Book)
 	FindAll() []*model.Book
+}
+
+// DB Target is parameters to get all mux's dependencies
+type DBTarget struct {
+	fx.In
+	MongoURL string `name:"mongo_url" optional:"true"`
+	Lc       fx.Lifecycle
+	Logger   *zap.Logger
 }
 
 func Save(document *model.Book) interface{} {
@@ -39,7 +49,8 @@ func FindAll() []*model.Book {
 	// Free the resource when mainn dunction is  returned
 	defer database.Close(client, ctx, cancel)
 
-	cursor, err := database.Query(client, ctx, string(constant.DB), string(constant.COL))
+	cursor, err := database.
+		Query(client, ctx, string(constant.DB), string(constant.COL))
 	// handle the errors.
 	if err != nil {
 		panic(err)

@@ -11,13 +11,11 @@ var Module = fx.Options(
 	fx.Provide(
 		config.EnvInit,
 		logging.LoggerInit,
-		database.GetConnection,
 		// server.RunServer,
-		// server.New,
-		// // Database
+		// Database
+		database.GetConnection,
 		// mongodb.New,
-		// postgresql.New,
-		// // Controller
+		// Controller
 		// controller.NewGraphQLController,
 		// controller.NewAuth,
 	),

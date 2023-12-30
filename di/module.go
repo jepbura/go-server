@@ -1,4 +1,4 @@
-package module
+package di
 
 import (
 	"github.com/jepbura/go-server/config"

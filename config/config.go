@@ -11,10 +11,8 @@ import (
 	"go.uber.org/fx"
 )
 
-// var GlobalResult Result
-
-// Result is return results for constants
-type Result struct {
+// Env is return results for constants
+type Env struct {
 	fx.Out
 	// Build Envirounment
 	BuildID   string `name:"build_id"`
@@ -41,10 +39,10 @@ type Result struct {
 }
 
 // New return all constants using in Project such as Dialogflow's ProjectID, Line's ChannelID
-func EnvInit() (Result, error) {
+func EnvInit() (Env, error) {
 	err := loadFile(".env")
 
-	return Result{
+	return Env{
 		BuildID:        os.Getenv("BUILD_ID"),
 		Branch:         os.Getenv("BRANCH"),
 		CommitSHA:      os.Getenv("COMMIT_SHA"),

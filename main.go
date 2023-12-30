@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jepbura/go-server/module"
+	"github.com/jepbura/go-server/di"
 	"github.com/jepbura/go-server/server"
 	"go.uber.org/fx"
 )
@@ -28,7 +28,7 @@ func main() {
 	// )
 
 	app := fx.New(
-		module.Module,
+		di.Module,
 		fx.Invoke(server.RunServer),
 		// fx.Invoke(database.GetConnection),
 	)

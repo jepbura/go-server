@@ -8,7 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/jepbura/go-server/constant"
-	"github.com/jepbura/go-server/graph"
+	"github.com/jepbura/go-server/feature/delivery/graph"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )

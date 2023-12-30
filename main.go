@@ -28,7 +28,7 @@ func main() {
 	// )
 
 	app := fx.New(
-		di.Module,
+		di.DependencyInjection,
 		fx.Invoke(server.RunServer),
 		// fx.Invoke(database.GetConnection),
 	)

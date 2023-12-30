@@ -3,11 +3,11 @@ package di
 import (
 	"github.com/jepbura/go-server/config"
 	"github.com/jepbura/go-server/database"
-	"github.com/jepbura/go-server/logging"
+	"github.com/jepbura/go-server/feature/infrastructure/logging"
 	"go.uber.org/fx"
 )
 
-var Module = fx.Options(
+var DependencyInjection = fx.Options(
 	fx.Provide(
 		config.EnvInit,
 		logging.LoggerInit,

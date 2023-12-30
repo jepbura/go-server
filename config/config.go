@@ -14,6 +14,7 @@ import (
 // Env is return results for constants
 type Env struct {
 	fx.Out
+
 	// Build Envirounment
 	BuildID   string `name:"build_id"`
 	Branch    string `name:"branch"`
@@ -262,4 +263,11 @@ func expandVariables(v string, m map[string]string) string {
 		}
 		return s
 	})
+}
+
+func DefaultIfEmpty(value, defaultValue string) string {
+	if value == "" {
+		return defaultValue
+	}
+	return value
 }

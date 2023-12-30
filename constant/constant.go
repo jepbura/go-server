@@ -8,4 +8,6 @@ const (
 	DB        key = "apiServer"
 	COL       key = "bookInfo"
 	MONGO_URL key = "mongodb://127.0.0.1:27017"
+	DBHost    key = "127.0.0.1"
+	DBPort    key = "27017"
 )

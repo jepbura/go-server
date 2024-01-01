@@ -8,10 +8,10 @@ import (
 
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/acme/autocert"
 
 	"go.uber.org/fx"
 	"go.uber.org/zap"
-	"golang.org/x/crypto/acme/autocert"
 )
 
 // Target is parameters to get all mux's dependencies

@@ -4,26 +4,25 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jepbura/go-server/di"
 	"github.com/jepbura/go-server/feature/delivery/controller"
 	"go.uber.org/fx"
 )
 
-// // Register function register all API controllers to Mux
-//
-//	func Register(target controller.Target) {
-//		for _, controller := range target.Controllers {
-//			controller.Register(target.Gin)
-//		}
-//	}
-//
 // Register function register all API controllers to Mux
-func Register(lc fx.Lifecycle, gin *gin.Engine, ctrls []controller.Controller) {
-	for _, ctrl := range ctrls {
-		ctrl.Register(gin)
+
+func Register(target controller.Target) {
+	for _, controller := range target.Controllers {
+		controller.Register(target.Gin)
 	}
 }
+
+// // Register function register all API controllers to Mux
+// func Register(lc fx.Lifecycle, gin *gin.Engine, ctrls []controller.Controller) {
+// 	for _, ctrl := range ctrls {
+// 		ctrl.Register(gin)
+// 	}
+// }
 
 func main() {
 

@@ -1,11 +1,10 @@
 package controller
 
 import (
-	"fmt"
-
-	"github.com/99designs/gqlgen/handler"
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
-	"github.com/jepbura/go-server/feature/delivery/graph"
+	"github.com/jepbura/go-server/feature/domain/graph"
 	"github.com/jepbura/go-server/feature/infrastructure/database/mongo"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
@@ -14,7 +13,7 @@ import (
 // GraphQLController handle the graphql request, parse request to schema and return results
 type GraphQLController struct {
 	graphiQLEnable bool
-	mongodb        *mongo.Client
+	mongodb        *mongo.Connection
 
 	logger *zap.Logger
 }
@@ -23,7 +22,7 @@ type GraphQLController struct {
 type GraphQLControllerTarget struct {
 	fx.In
 	GraphiQLEnable bool `name:"graphiql_enable"`
-	MongoDB        *mongo.Client
+	MongoDB        *mongo.Connection
 	Logger         *zap.Logger
 }
 
@@ -39,9 +38,9 @@ func NewGraphQLController(target GraphQLControllerTarget) Result {
 }
 
 // GrqphQL is defining as the GraphQL handler
+
 func (m *GraphQLController) GrqphQL() gin.HandlerFunc {
-	h := handler.GraphQL(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
-	fmt.Println("GraphQLController")
+	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
@@ -49,8 +48,8 @@ func (m *GraphQLController) GrqphQL() gin.HandlerFunc {
 
 // GraphiQL is defining as the GraphiQL Page handler
 func (m *GraphQLController) GraphiQL() gin.HandlerFunc {
-	h := handler.Playground("GraphQL", "/")
-
+	// h := playground.Handler("GraphQL", "/")
+	h := playground.Handler("GraphQL playground", "/query")
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}
@@ -58,12 +57,12 @@ func (m *GraphQLController) GraphiQL() gin.HandlerFunc {
 
 // Register is function to register all controller's endpoint handler
 func (m *GraphQLController) Register(r *gin.Engine) {
-	// r.Use(m.mongodb.Connect()).
-	// 	Use(m.Middleware()).
-	// 	// Use(m.auth.Middleware()).
-	// 	POST("/v1/graphql", m.GrqphQL())
+	r.Use(m.mongodb.Connect()).
+		Use(m.Middleware()).
+		// Use(m.auth.Middleware()).
+		POST("/query", m.GrqphQL())
 	if !m.graphiQLEnable {
-		r.GET("/v1/graphiql", m.GraphiQL())
+		r.GET("/", m.GraphiQL())
 	}
 }
 

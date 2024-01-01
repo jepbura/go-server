@@ -10,7 +10,7 @@ import (
 	"math/rand"
 
 	"github.com/jepbura/go-server/controller"
-	"github.com/jepbura/go-server/feature/delivery/graph/model"
+	"github.com/jepbura/go-server/feature/domain/graph/model"
 )
 
 // CreateBook is the resolver for the createBook field.

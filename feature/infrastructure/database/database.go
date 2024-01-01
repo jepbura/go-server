@@ -1,79 +1,90 @@
 package database
 
 import (
-	"context"
-	"fmt"
-	"log"
-	"time"
-
-	"github.com/jepbura/go-server/config"
-	"github.com/jepbura/go-server/constant"
-	"github.com/jepbura/go-server/feature/infrastructure/database/mongo"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
 )
 
-// GraphQLControllerTarget is parameter object for geting all GraphQLController's dependency
+// DatabaseTarget is parameter object for geting all Mongodb's dependency
 type DatabaseTarget struct {
 	fx.In
+	MongoURL       string `name:"mongo_url" optional:"true"`
 	GraphiQLEnable bool   `name:"graphiql_enable"`
 	MONGO_URL      string `name:"MONGO_URL"`
 	DBHost         string `name:"DB_HOST"`
 	DBPort         string `name:"DB_PORT"`
 	DBUser         string `name:"DB_USER"`
 	DBPass         string `name:"DB_PASS"`
+	DBName         string `name:"DB_NAME"`
 	Lc             fx.Lifecycle
-	Logger         *zap.Logger
+	// Logger         *zap.Logger
+	// dbHandler      *DBHandler
 }
 
-func NewMongoDatabase(target DatabaseTarget) (mongo.Client, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+// Connection is connection provider to access to global mongodb client
+// type DBHandler struct {
+// 	MongoClient mongo.Client
+// 	database    *mongo.Database
+// }
 
-	dbHost := target.DBHost
-	dbPort := target.DBPort
-	dbUser := target.DBUser
-	dbPass := target.DBPass
+// func NewMongoDatabase2(target DatabaseTarget) (*DBHandler, error) {
+// 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+// 	defer cancel()
 
-	dbHost = config.DefaultIfEmpty(dbHost, string(constant.DBHost))
-	dbPort = config.DefaultIfEmpty(dbPort, string(constant.DBPort))
+// 	dbHost := target.DBHost
+// 	dbPort := target.DBPort
+// 	dbUser := target.DBUser
+// 	dbPass := target.DBPass
+// 	dbName := target.DBName
 
-	mongodbURI := fmt.Sprintf("mongodb://%s:%s@%s:%s", dbUser, dbPass, dbHost, dbPort)
+// 	dbHost = config.DefaultIfEmpty(dbHost, string(constant.DBHost))
+// 	dbPort = config.DefaultIfEmpty(dbPort, string(constant.DBPort))
+// 	dbName = config.DefaultIfEmpty(dbName, string(constant.DB))
 
-	if dbUser == "" || dbPass == "" {
-		mongodbURI = fmt.Sprintf("mongodb://%s:%s", dbHost, dbPort)
-	}
+// 	mongodbURI := fmt.Sprintf("mongodb://%s:%s@%s:%s", dbUser, dbPass, dbHost, dbPort)
 
-	client, err := mongo.NewClient(mongodbURI)
+// 	if dbUser == "" || dbPass == "" {
+// 		mongodbURI = fmt.Sprintf("mongodb://%s:%s", dbHost, dbPort)
+// 	}
 
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	client, err := mongo.NewClient(mongodbURI)
 
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	err = client.Ping(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	err = client.Connect(ctx)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	defer CloseMongoDBConnection(client)
+// 	err = client.Ping(ctx)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	return client, nil
-}
+// 	defer CloseMongoDBConnection(client)
 
-func CloseMongoDBConnection(client mongo.Client) {
-	if client == nil {
-		return
-	}
+// 	target.dbHandler.MongoClient = client
+// 	database := client.Database(dbName)
+// 	target.dbHandler.database = &database
 
-	err := client.Disconnect(context.TODO())
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	return target.dbHandler, nil
 
-	log.Println("Connection to MongoDB closed.")
-}
+// 	// return client, nil
+// 	// return &Connection{
+// 	// 	client: &client,
+// 	// }, err
+// }
+
+// func CloseMongoDBConnection(client mongo.Client) {
+// 	if client == nil {
+// 		return
+// 	}
+
+// 	err := client.Disconnect(context.TODO())
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	log.Println("Connection to MongoDB closed.")
+// }

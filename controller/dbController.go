@@ -5,7 +5,7 @@ import (
 
 	"github.com/jepbura/go-server/constant"
 	"github.com/jepbura/go-server/database"
-	"github.com/jepbura/go-server/feature/delivery/graph/model"
+	"github.com/jepbura/go-server/feature/domain/graph/model"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )

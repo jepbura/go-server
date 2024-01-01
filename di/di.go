@@ -2,9 +2,10 @@ package di
 
 import (
 	"github.com/jepbura/go-server/config"
-	"github.com/jepbura/go-server/feature/infrastructure/database"
+	"github.com/jepbura/go-server/feature/delivery/controller"
+	"github.com/jepbura/go-server/feature/infrastructure/database/mongo"
 	"github.com/jepbura/go-server/feature/infrastructure/logging"
-	"github.com/jepbura/go-server/server"
+	"github.com/jepbura/go-server/feature/infrastructure/server"
 	"go.uber.org/fx"
 )
 
@@ -15,10 +16,10 @@ var DependencyInjection = fx.Options(
 		server.RunServer,
 		// Database
 		// database.GetConnection,
-		database.NewMongoDatabase,
+		mongo.NewMongoDatabase,
 		// mongodb.New,
 		// Controller
-		// controller.NewGraphQLController,
+		controller.NewGraphQLController,
 		// controller.NewAuth,
 	),
 	ServiceModule,

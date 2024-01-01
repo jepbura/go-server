@@ -13,6 +13,11 @@ import (
 	"github.com/jepbura/go-server/feature/domain/graph/model"
 )
 
+// CreateUser is the resolver for the createUser field.
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+}
+
 // CreateBook is the resolver for the createBook field.
 func (r *mutationResolver) CreateBook(ctx context.Context, input model.NewBook) (*model.Book, error) {
 	book := &model.Book{
@@ -25,6 +30,11 @@ func (r *mutationResolver) CreateBook(ctx context.Context, input model.NewBook) 
 	}
 	controller.Save(book)
 	return book, nil
+}
+
+// Users is the resolver for the users field.
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented: Users - Users"))
 }
 
 // Books is the resolver for the books field.

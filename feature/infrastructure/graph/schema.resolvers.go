@@ -9,38 +9,57 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/jepbura/go-server/controller"
 	"github.com/jepbura/go-server/feature/infrastructure/graph/model"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+	// panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+	err := r.userInteractor.SaveUser_Usecase(input)
+	if err != nil {
+		return nil, err
+	}
+
+	user := &model.User{
+		ID:   fmt.Sprintf("T%d", rand.Int()),
+		Name: input.Name,
+	}
+
+	return user, nil
 }
 
 // CreateBook is the resolver for the createBook field.
 func (r *mutationResolver) CreateBook(ctx context.Context, input model.NewBook) (*model.Book, error) {
-	book := &model.Book{
-		ID:    fmt.Sprintf("T%d", rand.Int()),
-		Title: input.Title,
-		Author: &model.User{
-			ID:   input.UserID,
-			Name: input.Name,
-		},
-	}
-	controller.Save(book)
-	return book, nil
+	panic(fmt.Errorf("not implemented: CreateBook - CreateBook"))
+	// book := &model.Book{
+	// 	ID:    fmt.Sprintf("T%d", rand.Int()),
+	// 	Title: input.Title,
+	// 	Author: &model.User{
+	// 		ID:   input.UserID,
+	// 		Name: input.Name,
+	// 	},
+	// }
+	// mongo_controller.Save(book)
+	// return book, nil
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	// panic(fmt.Errorf("not implemented: Users - users"))
+	fmt.Println("*********************************************")
+	users, err := r.userInteractor.FindAllUsers_Usecase()
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 // Books is the resolver for the books field.
 func (r *queryResolver) Books(ctx context.Context) ([]*model.Book, error) {
-	books := controller.FindAll()
-	return books, nil
+	panic(fmt.Errorf("not implemented: Books - Books"))
+	// books := mongo_controller.FindAll()
+	// return books, nil
 }
 
 // Mutation returns MutationResolver implementation.

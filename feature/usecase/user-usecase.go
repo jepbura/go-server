@@ -15,7 +15,7 @@ func NewUserInteractor(repository domain.UserRepository) UserInteractor {
 	return UserInteractor{repository}
 }
 
-func (interactor *UserInteractor) SaveUser_Usecase(user model.User) error {
+func (interactor *UserInteractor) SaveUser_Usecase(user model.NewUser) error {
 	err := interactor.UserRepository.SaveUser_Repo_Model(user)
 	if err != nil {
 		log.Println(err.Error())

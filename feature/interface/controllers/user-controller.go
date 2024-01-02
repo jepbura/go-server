@@ -18,7 +18,7 @@ func NewUserController(userInteractor usecase.UserInteractor) *UserController {
 
 func (controller *UserController) SaveUser_Controller(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
-	var user model.User
+	var user model.NewUser
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)

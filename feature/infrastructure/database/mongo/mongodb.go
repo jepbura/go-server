@@ -78,6 +78,11 @@ func NewMongoDatabase(target Target) (*Connection, error) {
 	}, err
 }
 
+// Client is a getter for the client field.
+func (c *Connection) Client() *mongo.Client {
+	return c.client
+}
+
 type key string
 
 const (

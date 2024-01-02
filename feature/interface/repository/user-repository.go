@@ -12,7 +12,7 @@ func NewUserRepository(handler DBHandler) UserRepository {
 	return UserRepository{handler}
 }
 
-func (repo UserRepository) SaveUser_Repository(user model.User) error {
+func (repo UserRepository) SaveUser_Repository(user model.NewUser) error {
 	err := repo.handler.SaveUser_DBHandler(user)
 	if err != nil {
 		return err

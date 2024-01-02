@@ -3,6 +3,7 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jepbura/go-server/config"
@@ -30,7 +31,6 @@ type Connection struct {
 	client *mongo.Client
 }
 
-// New is constructor of MongoDBConnection
 func NewMongoDatabase(target Target) (*Connection, error) {
 	if target.MongoURL == "" {
 		return nil, nil
@@ -51,15 +51,23 @@ func NewMongoDatabase(target Target) (*Connection, error) {
 	}
 
 	clientOptions := options.Client().ApplyURI(mongodbURI)
-	client, err := mongo.NewClient(clientOptions)
+	client, err := mongo.Connect(context.TODO(), clientOptions)
 
-	// client, err := mongo.NewClient(options.Client().ApplyURI(target.MongoURL))
+	// Error check
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Connect check
+	err = client.Ping(context.TODO(), nil)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Connected to MongoDB!")
 
 	target.Lc.Append(fx.Hook{
-		OnStart: func(ctx context.Context) error {
-			target.Logger.Info("Connecting MongoDB server at " + target.MongoURL + ".")
-			return client.Connect(ctx)
-		},
 		OnStop: func(ctx context.Context) error {
 			target.Logger.Info("Disconnect MongoDB server at " + target.MongoURL + ".")
 			return client.Disconnect(ctx)
@@ -87,6 +95,7 @@ func (m *Connection) Connect() gin.HandlerFunc {
 			c.Request = c.Request.WithContext(ctx)
 		} else {
 			// TODO: Warn
+			log.Println("Warning: Connection is nil")
 		}
 		// pass execution to the original handler
 		c.Next()
@@ -100,6 +109,7 @@ func (m *Connection) WithContext(ctx context.Context) context.Context {
 		return context.WithValue(ctx, mongoClient, m.client)
 	} else {
 		// TODO: Warn
+		log.Println("Warning: Connection is nil")
 	}
 	return ctx
 }

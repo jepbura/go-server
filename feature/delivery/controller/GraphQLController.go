@@ -4,8 +4,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
-	"github.com/jepbura/go-server/feature/domain/graph"
 	"github.com/jepbura/go-server/feature/infrastructure/database/mongo"
+	"github.com/jepbura/go-server/feature/infrastructure/graph"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )

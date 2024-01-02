@@ -2,8 +2,11 @@ package mongo
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jepbura/go-server/config"
+	"github.com/jepbura/go-server/constant"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/fx"
@@ -14,6 +17,10 @@ import (
 type Target struct {
 	fx.In
 	MongoURL string `name:"mongo_url" optional:"true"`
+	DBHost   string `name:"db_host"`
+	DBPort   string `name:"db_port"`
+	DBUser   string `name:"db_user"`
+	DBPass   string `name:"db_pass"`
 	Lc       fx.Lifecycle
 	Logger   *zap.Logger
 }
@@ -29,7 +36,24 @@ func NewMongoDatabase(target Target) (*Connection, error) {
 		return nil, nil
 	}
 
-	client, err := mongo.NewClient(options.Client().ApplyURI(target.MongoURL))
+	dbHost := target.DBHost
+	dbPort := target.DBPort
+	dbUser := target.DBUser
+	dbPass := target.DBPass
+
+	dbHost = config.DefaultIfEmpty(dbHost, string(constant.DBHost))
+	dbPort = config.DefaultIfEmpty(dbPort, string(constant.DBPort))
+
+	mongodbURI := fmt.Sprintf("mongodb://%s:%s@%s:%s", dbUser, dbPass, dbHost, dbPort)
+
+	if dbUser == "" || dbPass == "" {
+		mongodbURI = fmt.Sprintf("mongodb://%s:%s", dbHost, dbPort)
+	}
+
+	clientOptions := options.Client().ApplyURI(mongodbURI)
+	client, err := mongo.NewClient(clientOptions)
+
+	// client, err := mongo.NewClient(options.Client().ApplyURI(target.MongoURL))
 
 	target.Lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {

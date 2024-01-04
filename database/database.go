@@ -5,21 +5,18 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jepbura/go-server/constant"
+	"github.com/jepbura/go-server/pkg/constant"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
 
 // GraphQLControllerTarget is parameter object for geting all GraphQLController's dependency
 type DatabaseTarget struct {
-	fx.In
 	GraphiQLEnable bool   `name:"graphiql_enable"`
 	MONGO_URL      string `name:"MONGO_URL"`
-	Lc             fx.Lifecycle
 	Logger         *zap.Logger
 }
 

@@ -13,11 +13,11 @@ func main() {
 		log.Fatal("cannot load config: ", configErr)
 	}
 
-	server, diErr := di.InitializeAPP(config)
-	// fmt.Println("Server is: ", server)
+	diApp, diErr := di.InitializeAPP(config)
+	// fmt.Println("Server is: ", diApp)
 	if diErr != nil {
 		log.Fatal("cannot start server: ", diErr)
 	} else {
-		server.Http.Start()
+		diApp.Http.Start()
 	}
 }

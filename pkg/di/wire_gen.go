@@ -37,12 +37,16 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 	resolver := graph.Resolver{
 		Usecase: userUseCase,
 	}
+	mongoDBHandler := &mongo.MongoDBHandler{
+		Client: client,
+	}
 	userHandler := handler.NewUserHandler(userUseCase)
 	serverHTTP := http.NewServerHTTP(userHandler)
 	app := &App{
-		Resolver: resolver,
-		Client:   client,
-		Http:     serverHTTP,
+		Resolver:       resolver,
+		Client:         client,
+		MongoDBHandler: mongoDBHandler,
+		Http:           serverHTTP,
 	}
 	return app, nil
 }
@@ -50,16 +54,16 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 // wire.go:
 
 type App struct {
-	Resolver graph.Resolver
-	Client   *mongo2.Client
-	// DbProvider *mongodb.MongoDBHandler
+	Resolver       graph.Resolver
+	Client         *mongo2.Client
+	MongoDBHandler *mongo.MongoDBHandler
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
 	// UserHandler *handler.UserHandler
 	Http *http.ServerHTTP
 }
 
-var dbSet = wire.NewSet(mongo.NewMongoDatabase)
+var dbSet = wire.NewSet(mongo.NewMongoDatabase, wire.Struct(new(mongo.MongoDBHandler), "*"), wire.Bind(new(mongo.MongoDbProvider), new(*mongo.MongoDBHandler)))
 
 var NewUserRepository = wire.NewSet(repository.NewUserRepository)
 

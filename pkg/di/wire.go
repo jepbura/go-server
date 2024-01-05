@@ -18,9 +18,9 @@ import (
 )
 
 type App struct {
-	Resolver graph.Resolver
-	Client   *mongo.Client
-	// DbProvider *mongodb.MongoDBHandler
+	Resolver       graph.Resolver
+	Client         *mongo.Client
+	MongoDBHandler *mongodb.MongoDBHandler
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
 	// UserHandler *handler.UserHandler
@@ -30,8 +30,8 @@ type App struct {
 var dbSet = wire.NewSet(
 	mongodb.NewMongoDatabase,
 	// mongodb.ProvideMongoClient,
-	// wire.Struct(new(mongodb.MongoDBHandler), "*"),
-	// wire.Bind(new(mongodb.MongoDbProvider), new(*mongodb.MongoDBHandler)),
+	wire.Struct(new(mongodb.MongoDBHandler), "*"),
+	wire.Bind(new(mongodb.MongoDbProvider), new(*mongodb.MongoDBHandler)),
 )
 
 var NewUserRepository = wire.NewSet(

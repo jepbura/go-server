@@ -13,13 +13,12 @@ import (
 	"go.uber.org/zap"
 )
 
-// DBHandler is connection provider to access to global mongodb client
+// MongoDBHandler is connection provider to access to global mongodb client
 type MongoDBHandler struct {
 	Client *mongo.Client
 }
 
 type MongoDbProvider interface {
-	// ProvideMongoClient() *mongo.Client
 	Disconnect(ctx context.Context) error
 	Connect() gin.HandlerFunc
 	WithContext(ctx context.Context) context.Context
@@ -78,23 +77,6 @@ func NewMongoDatabase(cnf config.Env, Logger *zap.Logger) (*mongo.Client, error)
 	return client, nil
 }
 
-// // Client is a getter for the client field.
-// func (c *MongoDBHandler) ProvideMongoClient() *mongo.Client {
-// 	return c.Client
-// }
-
-func ProvideMongoClient(cnf config.Env, Logger *zap.Logger) (*mongo.Client, error) {
-
-	// client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
-
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-	if err != nil {
-		return nil, err
-	}
-	return client, nil
-}
-
 type key string
 
 const (
@@ -102,6 +84,7 @@ const (
 	mongoClient key = "mongo_client"
 )
 
+// Disconnect is method return adpater for http request that
 func (dbHandler *MongoDBHandler) Disconnect(ctx context.Context) error {
 	fmt.Println("Disconnecting from MongoDB!")
 	return dbHandler.Client.Disconnect(ctx)

@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/jepbura/go-server/pkg/domain"
-	repository_interface "github.com/jepbura/go-server/pkg/repository/interface"
-	usecase_interfaces "github.com/jepbura/go-server/pkg/usecase/interface"
+	"github.com/jepbura/go-server/pkg/repository/repository_interface"
+	"github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
 )
 
 type UserUseCase struct {

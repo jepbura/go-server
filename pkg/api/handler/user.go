@@ -8,7 +8,7 @@ import (
 	"github.com/jinzhu/copier"
 
 	domain "github.com/jepbura/go-server/pkg/domain"
-	services "github.com/jepbura/go-server/pkg/usecase/interface"
+	services "github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
 )
 
 type UserHandler struct {

@@ -23,8 +23,8 @@ type App struct {
 	// DbProvider *mongodb.MongoDBHandler
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
-	UserHandler *handler.UserHandler
-	Http        *http.ServerHTTP
+	// UserHandler *handler.UserHandler
+	Http *http.ServerHTTP
 }
 
 var dbSet = wire.NewSet(

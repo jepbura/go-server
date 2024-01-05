@@ -16,10 +16,10 @@ func main() {
 	}
 	fmt.Println("config is: ", config)
 
-	api, err := di.InitializeAPP(config)
-	if err != nil {
-		// handle error
+	server, diErr := di.InitializeAPP(config)
+	if diErr != nil {
+		log.Fatal("cannot start server: ", diErr)
+	} else {
+		server.Start()
 	}
-
-	fmt.Println("api is: ", api)
 }

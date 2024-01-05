@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jepbura/go-server/pkg/domain"
-	repository_interface "github.com/jepbura/go-server/pkg/repository/interface"
+	"github.com/jepbura/go-server/pkg/repository/repository_interface"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

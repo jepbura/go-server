@@ -1,6 +1,8 @@
 package http
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 
 	handler "github.com/jepbura/go-server/pkg/api/handler"
@@ -12,6 +14,9 @@ type ServerHTTP struct {
 }
 
 func NewServerHTTP(userHandler *handler.UserHandler) *ServerHTTP {
+	fmt.Print("*********************************************\n")
+	fmt.Print("NewServerHTTP\n")
+	fmt.Print("*********************************************\n")
 	engine := gin.New()
 
 	// Use logger from Gin

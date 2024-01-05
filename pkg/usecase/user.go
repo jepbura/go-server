@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/jepbura/go-server/pkg/domain"
 	"github.com/jepbura/go-server/pkg/repository/repository_interface"
@@ -13,6 +14,9 @@ type UserUseCase struct {
 }
 
 func NewUserUseCase(repo repository_interface.UserRepository) usecase_interfaces.UserUseCase {
+	fmt.Print("*********************************************\n")
+	fmt.Print("NewUserUseCase\n")
+	fmt.Print("*********************************************\n")
 	return &UserUseCase{
 		userRepo: repo,
 	}

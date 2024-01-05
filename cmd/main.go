@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/jepbura/go-server/pkg/config"
@@ -10,11 +9,9 @@ import (
 
 func main() {
 	config, configErr := config.EnvInit()
-	fmt.Println("config is: ", config.DBName)
 	if configErr != nil {
 		log.Fatal("cannot load config: ", configErr)
 	}
-	fmt.Println("config is: ", config)
 
 	server, diErr := di.InitializeAPP(config)
 	if diErr != nil {

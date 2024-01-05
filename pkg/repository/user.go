@@ -14,6 +14,9 @@ type UserDatabase struct {
 }
 
 func NewUserRepository(DB *mongo.Client) repository_interface.UserRepository {
+	fmt.Print("*********************************************\n")
+	fmt.Print("NewUserRepository\n")
+	fmt.Print("*********************************************\n")
 	return &UserDatabase{DB}
 }
 

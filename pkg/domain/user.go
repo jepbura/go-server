@@ -1,7 +1,5 @@
 package domain
 
-type Users struct {
-	ID      uint   `json:"id" gorm:"unique;not null"`
-	Name    string `json:"name"`
-	Surname string `json:"surname"`
-}
+import "github.com/jepbura/go-server/pkg/infrastructure/graph/model"
+
+type Users = model.User

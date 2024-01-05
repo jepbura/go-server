@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -29,6 +30,9 @@ type NewUserHandlerProvider interface {
 }
 
 func NewUserHandler(usecase services.UserUseCase) *UserHandler {
+	fmt.Print("*********************************************\n")
+	fmt.Print("NewUserHandler\n")
+	fmt.Print("*********************************************\n")
 	return &UserHandler{
 		userUseCase: usecase,
 	}

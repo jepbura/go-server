@@ -14,9 +14,10 @@ func main() {
 	}
 
 	server, diErr := di.InitializeAPP(config)
+	// fmt.Println("Server is: ", server)
 	if diErr != nil {
 		log.Fatal("cannot start server: ", diErr)
 	} else {
-		server.Start()
+		server.Http.Start()
 	}
 }

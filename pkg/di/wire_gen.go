@@ -12,6 +12,7 @@ import (
 	"github.com/jepbura/go-server/pkg/api/handler"
 	"github.com/jepbura/go-server/pkg/config"
 	"github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
+	"github.com/jepbura/go-server/pkg/infrastructure/graph"
 	"github.com/jepbura/go-server/pkg/infrastructure/logging"
 	"github.com/jepbura/go-server/pkg/repository"
 	"github.com/jepbura/go-server/pkg/usecase"
@@ -20,7 +21,9 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeAPP(cnf config.Env) (*http.ServerHTTP, error) {
+// func InitializeAPP(cnf config.Env) (*http.ServerHTTP, error) {
+// func InitializeAPP(cnf config.Env) (*mongodb.MongoDBHandler, error) {
+func InitializeAPP(cnf config.Env) (*App, error) {
 	logger, err := logging.LoggerInit(cnf)
 	if err != nil {
 		return nil, err
@@ -31,15 +34,24 @@ func InitializeAPP(cnf config.Env) (*http.ServerHTTP, error) {
 	}
 	userRepository := repository.NewUserRepository(client)
 	userUseCase := usecase.NewUserUseCase(userRepository)
+	resolver := graph.Resolver{
+		Usecase: userUseCase,
+	}
 	userHandler := handler.NewUserHandler(userUseCase)
 	serverHTTP := http.NewServerHTTP(userHandler)
-	return serverHTTP, nil
+	app := &App{
+		Resolver: resolver,
+		Client:   client,
+		Http:     serverHTTP,
+	}
+	return app, nil
 }
 
 // wire.go:
 
 type App struct {
-	Client *mongo2.Client
+	Resolver graph.Resolver
+	Client   *mongo2.Client
 	// DbProvider *mongodb.MongoDBHandler
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase

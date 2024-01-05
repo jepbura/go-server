@@ -5,8 +5,8 @@ package di
 
 import (
 	"github.com/google/wire"
-	http "github.com/jepbura/go-server/pkg/api"
 	handler "github.com/jepbura/go-server/pkg/api/handler"
+	http "github.com/jepbura/go-server/pkg/infrastructure/server"
 
 	"github.com/jepbura/go-server/pkg/config"
 	mongodb "github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
@@ -69,7 +69,7 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 		usecaseSet,
 		// handler
 		// handler.NewUserHandler,
-		handlerSet,
+		// handlerSet,
 		// Server
 		http.NewServerHTTP,
 		wire.Struct(new(graph.Resolver), "*"),

@@ -8,12 +8,12 @@ package di
 
 import (
 	"github.com/google/wire"
-	"github.com/jepbura/go-server/pkg/api"
 	"github.com/jepbura/go-server/pkg/api/handler"
 	"github.com/jepbura/go-server/pkg/config"
 	"github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
 	"github.com/jepbura/go-server/pkg/infrastructure/graph"
 	"github.com/jepbura/go-server/pkg/infrastructure/logging"
+	"github.com/jepbura/go-server/pkg/infrastructure/server"
 	"github.com/jepbura/go-server/pkg/repository"
 	"github.com/jepbura/go-server/pkg/usecase"
 	mongo2 "go.mongodb.org/mongo-driver/mongo"
@@ -40,8 +40,7 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 	mongoDBHandler := &mongo.MongoDBHandler{
 		Client: client,
 	}
-	userHandler := handler.NewUserHandler(userUseCase)
-	serverHTTP := http.NewServerHTTP(userHandler)
+	serverHTTP := server.NewServerHTTP(cnf, logger)
 	app := &App{
 		Resolver:       resolver,
 		Client:         client,
@@ -60,7 +59,7 @@ type App struct {
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
 	// UserHandler *handler.UserHandler
-	Http *http.ServerHTTP
+	Http *server.ServerHTTP
 }
 
 var dbSet = wire.NewSet(mongo.NewMongoDatabase, wire.Struct(new(mongo.MongoDBHandler), "*"), wire.Bind(new(mongo.MongoDbProvider), new(*mongo.MongoDBHandler)))

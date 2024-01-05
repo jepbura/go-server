@@ -20,10 +20,6 @@ func NewUserRepository(DB *mongo.Client) repository_interface.UserRepository {
 	return &UserDatabase{DB}
 }
 
-// func NewUserRepository(client mongodb.MongoDBHandler) interfaces.UserRepository {
-// 	return &UserDatabase{client: client.Client}
-// }
-
 func (c *UserDatabase) FindAll(ctx context.Context) ([]domain.Users, error) {
 	fmt.Print("*********************************************\n")
 	fmt.Print("FindAll Repository\n")

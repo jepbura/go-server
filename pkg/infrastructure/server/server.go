@@ -7,23 +7,30 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/jepbura/go-server/pkg/config"
+	"github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
+	"github.com/jepbura/go-server/pkg/infrastructure/graph"
 	"golang.org/x/crypto/acme/autocert"
 
 	"go.uber.org/zap"
 )
 
 type ServerHTTP struct {
-	Environment string `name:"env"`
-	Port        string `name:"port"`
-	Logger      *zap.Logger
-	Server      *http.Server
-	Manager     *autocert.Manager
+	Environment    string `name:"env"`
+	Port           string `name:"port"`
+	GraphiQLEnable bool   `name:"graphiql_enable"`
+	Logger         *zap.Logger
+	Server         *http.Server
+	Manager        *autocert.Manager
+	engine         *gin.Engine
+	MongoDB        *mongo.MongoDBHandler
 }
 
-func RunServer(cnf config.Env, Logger *zap.Logger) *ServerHTTP {
+func NewServerHTTP(cnf config.Env, Logger *zap.Logger) *ServerHTTP {
 	fmt.Print("*********************************************\n")
 	fmt.Print("RunServer\n")
 	fmt.Print("*********************************************\n")
@@ -38,6 +45,7 @@ func RunServer(cnf config.Env, Logger *zap.Logger) *ServerHTTP {
 		Environment: cnf.Environment,
 		Port:        cnf.Port,
 		Logger:      Logger,
+		engine:      engine,
 	}
 
 	if cnf.Environment != "local" {
@@ -80,4 +88,44 @@ func (s *ServerHTTP) StartServer() {
 func (s *ServerHTTP) StopServer(ctx context.Context) error {
 	s.Logger.Info("Stopping HTTPS server.")
 	return s.Server.Shutdown(ctx)
+}
+
+func (s *ServerHTTP) StartGraphQLServer() {
+	fmt.Print("*********************************************\n")
+	fmt.Print("NewGraphQLController\n")
+	fmt.Print("*********************************************\n")
+	s.engine.Use(s.MongoDB.Connect()).
+		Use(Middleware()).
+		// Use(m.auth.Middleware()).
+		POST("/query", GrqphQL())
+	if !s.GraphiQLEnable {
+		s.engine.GET("/", GraphiQL())
+	}
+}
+
+// GrqphQL is defining as the GraphQL handler
+func GrqphQL() gin.HandlerFunc {
+	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
+// GraphiQL is defining as the GraphiQL Page handler
+func GraphiQL() gin.HandlerFunc {
+	// h := playground.Handler("GraphQL", "/")
+	h := playground.Handler("GraphQL playground", "/query")
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
+// Middleware for GraphQL resolver to pass services into ctx
+func Middleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx := c.Request.Context()
+		// ctx = context.WithValue(ctx, admin.Key, m.admin)
+		c.Request = c.Request.WithContext(ctx)
+		c.Next()
+	}
 }

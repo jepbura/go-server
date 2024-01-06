@@ -5,7 +5,6 @@ package di
 
 import (
 	"github.com/google/wire"
-	handler "github.com/jepbura/go-server/pkg/api/handler"
 	http "github.com/jepbura/go-server/pkg/infrastructure/server"
 
 	"github.com/jepbura/go-server/pkg/config"
@@ -47,12 +46,6 @@ var usecaseSet = wire.NewSet(
 // wire.Bind(new(usecaseProvider.UserUseCase), new(*usecase.UserUseCase)),
 )
 
-var handlerSet = wire.NewSet(
-	handler.NewUserHandler,
-	// wire.Struct(new(handler.UserHandler), "*"),
-	// wire.Bind(new(handler.NewUserHandlerProvider), new(*handler.UserHandler)),
-)
-
 // func InitializeAPP(cnf config.Env) (*http.ServerHTTP, error) {
 // func InitializeAPP(cnf config.Env) (*mongodb.MongoDBHandler, error) {
 func InitializeAPP(cnf config.Env) (*App, error) {
@@ -67,9 +60,6 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 		// Use case
 		// usecase.NewUserUseCase,
 		usecaseSet,
-		// handler
-		// handler.NewUserHandler,
-		// handlerSet,
 		// Server
 		http.NewServerHTTP,
 		wire.Struct(new(graph.Resolver), "*"),

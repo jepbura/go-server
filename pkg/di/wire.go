@@ -14,12 +14,11 @@ import (
 	userRepository "github.com/jepbura/go-server/pkg/repository/user_repository"
 	"github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
 	userUsecase "github.com/jepbura/go-server/pkg/usecase/user_usecase"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type App struct {
-	Resolver       *graph.Resolver
-	Client         *mongo.Client
+	Resolver *graph.Resolver
+	// Client         *mongo.Client
 	MongoDBHandler *mongodb.MongoDBHandler
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
@@ -31,8 +30,8 @@ type App struct {
 var dbSet = wire.NewSet(
 	mongodb.NewMongoDatabase,
 	// mongodb.ProvideMongoClient,
-	wire.Struct(new(mongodb.MongoDBHandler), "*"),
-	wire.Bind(new(mongodb.MongoDbProvider), new(*mongodb.MongoDBHandler)),
+	// wire.Struct(new(mongodb.MongoDBHandler), "*"),
+	// wire.Bind(new(mongodb.MongoDbInitProvider), new(*mongodb.MongoDBHandler)),
 )
 
 var NewUserRepository = wire.NewSet(

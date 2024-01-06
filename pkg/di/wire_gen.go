@@ -16,7 +16,6 @@ import (
 	"github.com/jepbura/go-server/pkg/repository/user_repository"
 	"github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
 	"github.com/jepbura/go-server/pkg/usecase/user_usecase"
-	mongo2 "go.mongodb.org/mongo-driver/mongo"
 )
 
 // Injectors from wire.go:
@@ -26,15 +25,11 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 	if err != nil {
 		return nil, err
 	}
-	client, err := mongo.NewMongoDatabase(cnf, logger)
+	mongoDBHandler, err := mongo.NewMongoDatabase(cnf, logger)
 	if err != nil {
 		return nil, err
 	}
-	mongoDBHandler := mongo.MongoDBHandler{
-		Env:    cnf,
-		Client: client,
-	}
-	repositoryInterface := userRepository.NewUserRepository(client, mongoDBHandler)
+	repositoryInterface := userRepository.NewUserRepository(mongoDBHandler)
 	userUsecaseInterface := userUsecase.NewUserUseCase(repositoryInterface)
 	useCasesInterface := &usecase_interfaces.UseCasesInterface{
 		UserUsecaseInterface: userUsecaseInterface,
@@ -42,15 +37,10 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 	resolver := &graph.Resolver{
 		Usecase: useCasesInterface,
 	}
-	mongoMongoDBHandler := &mongo.MongoDBHandler{
-		Env:    cnf,
-		Client: client,
-	}
 	serverHTTP := server.NewServerHTTP(cnf, logger, useCasesInterface)
 	app := &App{
 		Resolver:       resolver,
-		Client:         client,
-		MongoDBHandler: mongoMongoDBHandler,
+		MongoDBHandler: mongoDBHandler,
 		Http:           serverHTTP,
 	}
 	return app, nil
@@ -59,8 +49,8 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 // wire.go:
 
 type App struct {
-	Resolver       *graph.Resolver
-	Client         *mongo2.Client
+	Resolver *graph.Resolver
+	// Client         *mongo.Client
 	MongoDBHandler *mongo.MongoDBHandler
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
@@ -69,7 +59,7 @@ type App struct {
 	Http *server.ServerHTTP
 }
 
-var dbSet = wire.NewSet(mongo.NewMongoDatabase, wire.Struct(new(mongo.MongoDBHandler), "*"), wire.Bind(new(mongo.MongoDbProvider), new(*mongo.MongoDBHandler)))
+var dbSet = wire.NewSet(mongo.NewMongoDatabase)
 
 var NewUserRepository = wire.NewSet(userRepository.NewUserRepository)
 

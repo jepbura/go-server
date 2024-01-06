@@ -4,25 +4,27 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/jepbura/go-server/pkg/config"
+	"github.com/jepbura/go-server/pkg/constant"
 	"github.com/jepbura/go-server/pkg/domain"
 	mongodb "github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
 	"github.com/jepbura/go-server/pkg/repository/repository_interface"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type UserDatabase struct {
-	DB        *mongo.Client
-	DBHandler mongodb.MongoDBHandler
+	// DB        *mongo.Client
+	DBHandler *mongodb.MongoDBHandler
 }
 
-func NewUserRepository(DB *mongo.Client, DBHandler mongodb.MongoDBHandler) repository_interface.RepositoryInterface {
+func NewUserRepository(DBHandler *mongodb.MongoDBHandler) repository_interface.RepositoryInterface {
 	fmt.Print("*********************************************\n")
 	fmt.Print("NewUserRepository\n")
 	fmt.Print("*********************************************\n")
-	return &UserDatabase{
-		DB:        DB,
-		DBHandler: DBHandler,
-	}
+	return &UserDatabase{DBHandler}
+	// return &UserDatabase{
+	// 	DB:        DBHandler.Client,
+	// 	DBHandler: DBHandler,
+	// }
 }
 
 func (c *UserDatabase) FindAll(ctx context.Context) ([]*domain.User, error) {
@@ -36,7 +38,20 @@ func (c *UserDatabase) FindByID(ctx context.Context, id string) (domain.User, er
 }
 
 func (c *UserDatabase) Save(ctx context.Context, newUser domain.NewUser) (domain.User, error) {
-	user, err := c.DBHandler.Save(ctx, newUser)
+	dbHandler := c.DBHandler
+	DBName := dbHandler.Env.DBName
+	DBUserCOL := dbHandler.Env.DBUserCOL
+	DBName = config.DefaultIfEmpty(DBName, string(constant.DBName))
+	DBUserCOL = config.DefaultIfEmpty(DBUserCOL, string(constant.DB_USER_COL))
+	fmt.Println("DBName is: ", DBName)
+	fmt.Println("DBUserCOL is: ", DBUserCOL)
+	fmt.Println("dbHandler.Client is: ", dbHandler.Client)
+	db := mongodb.MongoDBInputsFunc{
+		Client: dbHandler.Client,
+		DBName: DBName,
+		Col:    DBUserCOL,
+	}
+	user, err := dbHandler.Save(ctx, newUser, db)
 	return user, err
 }
 

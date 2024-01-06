@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math/rand"
 
@@ -60,12 +61,12 @@ func (m *MongoDBHandler) FindByID(ctx context.Context, id string) (domain.User, 
 	return user, nil
 }
 
-func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser) (domain.User, error) {
+func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser, db MongoDBInputsFunc) (domain.User, error) {
 	fmt.Print("*********************************************\n")
 	fmt.Print("MongoDBHandler Save\n")
 	fmt.Print("*********************************************\n")
 
-	user := domain.User{
+	_user := domain.User{
 		ID:          fmt.Sprintf("T%d", rand.Int()),
 		Name:        "John",
 		Surname:     "Doe",
@@ -83,7 +84,28 @@ func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser) (doma
 		Settings:    "default",
 	}
 
-	return user, nil
+	// Get the collection
+	// collection, err := Collection(ctx, db)
+	if db.Client == nil {
+		fmt.Println("MongoDB client is nil")
+		return domain.User{}, errors.New("MongoDB client is nil")
+	}
+
+	collection := db.Client.Database(db.DBName).Collection(db.Col)
+
+	if collection == nil {
+		fmt.Println("collection is: ")
+		fmt.Println("collection is: ", collection)
+		return domain.User{}, errors.New("MongoDB collection is nil")
+	}
+
+	user, err := collection.InsertOne(ctx, newUser)
+	if err != nil {
+		return domain.User{}, err
+	}
+	fmt.Println("user is: ", user)
+	return _user, nil
+
 }
 
 func (m *MongoDBHandler) Delete(ctx context.Context, id string) (domain.User, error) {

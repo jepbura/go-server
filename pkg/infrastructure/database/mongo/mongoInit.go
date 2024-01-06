@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 
@@ -19,7 +20,14 @@ type MongoDBHandler struct {
 	Client *mongo.Client
 }
 
-func NewMongoDatabase(cnf config.Env, Logger *zap.Logger) (*mongo.Client, error) {
+type MongoDBInputsFunc struct {
+	Client *mongo.Client
+	DBName string
+	Col    string
+}
+
+// func NewMongoDatabase(cnf config.Env, Logger *zap.Logger) (*mongo.Client, error) {
+func NewMongoDatabase(cnf config.Env, Logger *zap.Logger) (*MongoDBHandler, error) {
 	fmt.Print("*********************************************\n")
 	fmt.Print("NewMongoDatabase\n")
 	fmt.Print("*********************************************\n")
@@ -58,8 +66,12 @@ func NewMongoDatabase(cnf config.Env, Logger *zap.Logger) (*mongo.Client, error)
 	}
 
 	fmt.Println("Connected to MongoDB!")
-
-	return client, nil
+	mongoDbHandler := &MongoDBHandler{
+		Client: client,
+		Env:    cnf,
+	}
+	return mongoDbHandler, nil
+	// return client, nil
 }
 
 type key string
@@ -110,4 +122,20 @@ func ForContext(ctx context.Context) *mongo.Client {
 		panic("ctx passing is not contain mongodb client")
 	}
 	return client
+}
+
+func Collection(ctx context.Context, db MongoDBInputsFunc) (*mongo.Collection, error) {
+
+	if db.Client == nil {
+		fmt.Println("MongoDB client is nil")
+		return nil, errors.New("MongoDB client is nil")
+	}
+
+	collection := db.Client.Database(db.DBName).Collection(db.Col)
+	if collection == nil {
+		fmt.Println("MongoDB collection is nil")
+		return nil, errors.New("MongoDB collection is nil")
+	}
+
+	return collection, nil
 }

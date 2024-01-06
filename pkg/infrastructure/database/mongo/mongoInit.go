@@ -20,19 +20,15 @@ type MongoDBHandler struct {
 	Client *mongo.Client
 }
 
-type MongoDBInputsFunc struct {
-	Client *mongo.Client
-	DBName string
-	Col    string
-}
-
 // func NewMongoDatabase(cnf config.Env, Logger *zap.Logger) (*mongo.Client, error) {
 func NewMongoDatabase(cnf config.Env, Logger *zap.Logger) (*MongoDBHandler, error) {
 	fmt.Print("*********************************************\n")
 	fmt.Print("NewMongoDatabase\n")
 	fmt.Print("*********************************************\n")
 
-	if cnf.MongoURL == "" {
+	Logger.Info("Initializing MongoDB connection...")
+
+	if cnf.DBHost == "" && cnf.DBPort == "" {
 		return nil, nil
 	}
 
@@ -65,7 +61,9 @@ func NewMongoDatabase(cnf config.Env, Logger *zap.Logger) (*MongoDBHandler, erro
 		log.Fatal(err)
 	}
 
+	fmt.Print("*********************************************\n")
 	fmt.Println("Connected to MongoDB!")
+	fmt.Print("*********************************************\n")
 	mongoDbHandler := &MongoDBHandler{
 		Client: client,
 		Env:    cnf,
@@ -96,7 +94,7 @@ func (m *MongoDBHandler) Connect() gin.HandlerFunc {
 			c.Request = c.Request.WithContext(ctx)
 		} else {
 			// TODO: Warn
-			log.Println("Warning: DBHandler is nil")
+			log.Println("Warning: Connect DBHandler is nil")
 		}
 		// pass execution to the original handler
 		c.Next()
@@ -110,7 +108,7 @@ func (m *MongoDBHandler) WithContext(ctx context.Context) context.Context {
 		return context.WithValue(ctx, mongoClient, m.Client)
 	} else {
 		// TODO: Warn
-		log.Println("Warning: DBHandler is nil")
+		log.Println("Warning: WithContext DBHandler is nil")
 	}
 	return ctx
 }
@@ -124,14 +122,14 @@ func ForContext(ctx context.Context) *mongo.Client {
 	return client
 }
 
-func Collection(ctx context.Context, db MongoDBInputsFunc) (*mongo.Collection, error) {
+func (m *MongoDBHandler) Collection(ctx context.Context, col string) (*mongo.Collection, error) {
 
-	if db.Client == nil {
+	if m.Client == nil {
 		fmt.Println("MongoDB client is nil")
 		return nil, errors.New("MongoDB client is nil")
 	}
 
-	collection := db.Client.Database(db.DBName).Collection(db.Col)
+	collection := m.Client.Database(m.Env.DBName).Collection(col)
 	if collection == nil {
 		fmt.Println("MongoDB collection is nil")
 		return nil, errors.New("MongoDB collection is nil")

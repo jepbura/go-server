@@ -23,7 +23,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		return nil, err
 	}
 
-	return &user, nil
+	return user, nil
 }
 
 // DeleteUser is the resolver for the deleteUser field.
@@ -38,7 +38,7 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.Us
 		return nil, err
 	}
 
-	return &user, nil
+	return user, nil
 }
 
 // Users is the resolver for the users field.
@@ -69,7 +69,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 		return nil, err
 	}
 
-	return &user, nil
+	return user, nil
 }
 
 // Mutation returns MutationResolver implementation.

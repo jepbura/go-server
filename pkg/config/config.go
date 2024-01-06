@@ -20,7 +20,6 @@ type Env struct {
 	// GraphiQLEnable variables
 	GraphiQLEnable bool `name:"graphiql_enable"`
 	// MongoDB
-	MongoURL      string `name:"mongo_url"`
 	MongoDatabase string `name:"mongo_database"`
 	DBHost        string `name:"db_host"`
 	DBPort        string `name:"db_port"`

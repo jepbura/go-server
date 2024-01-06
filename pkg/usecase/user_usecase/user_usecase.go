@@ -27,18 +27,18 @@ func (c *UserUseCase) FindAll(ctx context.Context) ([]*domain.User, error) {
 	return users, err
 }
 
-func (c *UserUseCase) FindByID(ctx context.Context, id string) (domain.User, error) {
+func (c *UserUseCase) FindByID(ctx context.Context, id string) (*domain.User, error) {
 	user, err := c.userRepo.FindByID(ctx, id)
 	return user, err
 }
 
-func (c *UserUseCase) Save(ctx context.Context, newUser domain.NewUser) (domain.User, error) {
+func (c *UserUseCase) Save(ctx context.Context, newUser domain.NewUser) (*domain.User, error) {
 	user, err := c.userRepo.Save(ctx, newUser)
 
 	return user, err
 }
 
-func (c *UserUseCase) Delete(ctx context.Context, id string) (domain.User, error) {
+func (c *UserUseCase) Delete(ctx context.Context, id string) (*domain.User, error) {
 	deleteUser, err := c.userRepo.Delete(ctx, id)
 
 	return deleteUser, err

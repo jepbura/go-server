@@ -30,7 +30,7 @@ func (c *UserDatabase) FindAll(ctx context.Context) ([]*domain.User, error) {
 	return users, err
 }
 
-func (c *UserDatabase) FindByID(ctx context.Context, id uint) (domain.User, error) {
+func (c *UserDatabase) FindByID(ctx context.Context, id string) (domain.User, error) {
 	user, err := c.DBHandler.FindByID(ctx, id)
 	return user, err
 }
@@ -40,7 +40,7 @@ func (c *UserDatabase) Save(ctx context.Context, newUser domain.NewUser) (domain
 	return user, err
 }
 
-func (c *UserDatabase) Delete(ctx context.Context, user domain.User) error {
-	err := c.DBHandler.Delete(ctx, user)
-	return err
+func (c *UserDatabase) Delete(ctx context.Context, id string) (domain.User, error) {
+	deleteUser, err := c.DBHandler.Delete(ctx, id)
+	return deleteUser, err
 }

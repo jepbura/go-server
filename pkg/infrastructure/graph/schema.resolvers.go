@@ -14,11 +14,11 @@ import (
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
 	// panic(fmt.Errorf("not implemented: CreateUser - createUser"))
-	if r.Usecase == nil {
+	if r.Usecase.UserUsecaseInterface == nil {
 		return nil, fmt.Errorf("not implemented: Users - users")
 	}
 
-	user, err := r.Usecase.Save(ctx, input)
+	user, err := r.Usecase.UserUsecaseInterface.Save(ctx, input)
 	if err != nil {
 		return nil, err
 	}
@@ -35,11 +35,11 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.Us
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	// panic(fmt.Errorf("not implemented: Users - users"))
 
-	if r.Usecase == nil {
+	if r.Usecase.UserUsecaseInterface == nil {
 		return nil, fmt.Errorf("not implemented: Users - users")
 	}
 
-	users, err := r.Usecase.FindAll(ctx)
+	users, err := r.Usecase.UserUsecaseInterface.FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}

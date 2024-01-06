@@ -14,6 +14,7 @@ import (
 	"github.com/jepbura/go-server/pkg/infrastructure/logging"
 	"github.com/jepbura/go-server/pkg/infrastructure/server"
 	"github.com/jepbura/go-server/pkg/repository/user_repository"
+	"github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
 	"github.com/jepbura/go-server/pkg/usecase/user_usecase"
 	mongo2 "go.mongodb.org/mongo-driver/mongo"
 )
@@ -36,11 +37,17 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 		Client: client,
 	}
 	repositoryInterface := repository.NewUserRepository(client, mongoDBHandler)
-	useCaseInterface := usecase.NewUserUseCase(repositoryInterface)
-	resolver := graph.Resolver{
-		Usecase: useCaseInterface,
+	userUsecaseInterface := usecase.NewUserUseCase(repositoryInterface)
+	useCasesInterface := usecase_interfaces.UseCasesInterface{
+		UserUsecaseInterface: userUsecaseInterface,
 	}
-	serverHTTP := server.NewServerHTTP(cnf, logger, useCaseInterface)
+	resolver := graph.Resolver{
+		Usecase: useCasesInterface,
+	}
+	usecase_interfacesUseCasesInterface := &usecase_interfaces.UseCasesInterface{
+		UserUsecaseInterface: userUsecaseInterface,
+	}
+	serverHTTP := server.NewServerHTTP(cnf, logger, usecase_interfacesUseCasesInterface)
 	app := &App{
 		Resolver: resolver,
 		Client:   client,
@@ -58,6 +65,7 @@ type App struct {
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
 	// UserHandler *handler.UserHandler
+	// Usecase *usecase_interfaces.AllUseCaseInterface
 	Http *server.ServerHTTP
 }
 
@@ -65,4 +73,4 @@ var dbSet = wire.NewSet(mongo.NewMongoDatabase, wire.Struct(new(mongo.MongoDBHan
 
 var NewUserRepository = wire.NewSet(repository.NewUserRepository)
 
-var usecaseSet = wire.NewSet(usecase.NewUserUseCase)
+var usecaseSet = wire.NewSet(usecase.NewUserUseCase, wire.Struct(new(usecase_interfaces.UseCasesInterface), "*"))

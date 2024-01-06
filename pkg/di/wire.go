@@ -12,7 +12,8 @@ import (
 	"github.com/jepbura/go-server/pkg/infrastructure/graph"
 	"github.com/jepbura/go-server/pkg/infrastructure/logging"
 	repository "github.com/jepbura/go-server/pkg/repository/user_repository"
-	usecase "github.com/jepbura/go-server/pkg/usecase/user_usecase"
+	"github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
+	userUsecase "github.com/jepbura/go-server/pkg/usecase/user_usecase"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -23,6 +24,7 @@ type App struct {
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
 	// UserHandler *handler.UserHandler
+	// Usecase *usecase_interfaces.AllUseCaseInterface
 	Http *http.ServerHTTP
 }
 
@@ -40,10 +42,9 @@ var NewUserRepository = wire.NewSet(
 )
 
 var usecaseSet = wire.NewSet(
-	usecase.NewUserUseCase,
+	userUsecase.NewUserUseCase,
 
-// wire.Struct(new(usecase.UserUseCase), "*"),
-// wire.Bind(new(usecaseProvider.UserUseCase), new(*usecase.UserUseCase)),
+	wire.Struct(new(usecase_interfaces.UseCasesInterface), "*"),
 )
 
 // func InitializeAPP(cnf config.Env) (*http.ServerHTTP, error) {

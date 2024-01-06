@@ -13,7 +13,7 @@ type UserUseCase struct {
 	userRepo repository_interface.RepositoryInterface
 }
 
-func NewUserUseCase(repo repository_interface.RepositoryInterface) usecase_interfaces.UseCaseInterface {
+func NewUserUseCase(repo repository_interface.RepositoryInterface) usecase_interfaces.UserUsecaseInterface {
 	fmt.Print("*********************************************\n")
 	fmt.Print("NewUserUseCase\n")
 	fmt.Print("*********************************************\n")

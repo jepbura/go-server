@@ -23,6 +23,10 @@ type MongoDbProvider interface {
 	Disconnect(ctx context.Context) error
 	Connect() gin.HandlerFunc
 	WithContext(ctx context.Context) context.Context
+	FindAll(ctx context.Context) ([]*domain.User, error)
+	FindByID(ctx context.Context, id uint) (domain.User, error)
+	Save(ctx context.Context, user domain.User) (domain.User, error)
+	Delete(ctx context.Context, user domain.User) error
 }
 
 func NewMongoDatabase(cnf config.Env, Logger *zap.Logger) (*mongo.Client, error) {
@@ -130,7 +134,7 @@ func ForContext(ctx context.Context) *mongo.Client {
 
 func (m *MongoDBHandler) FindAll(ctx context.Context) ([]*domain.User, error) {
 	fmt.Print("*********************************************\n")
-	fmt.Print("MongoDBHandler Repository\n")
+	fmt.Print("MongoDBHandler FindAll\n")
 	fmt.Print("*********************************************\n")
 	user := &domain.User{
 		ID:          "1",
@@ -157,7 +161,7 @@ func (m *MongoDBHandler) FindAll(ctx context.Context) ([]*domain.User, error) {
 
 func (m *MongoDBHandler) FindByID(ctx context.Context, id uint) (domain.User, error) {
 	fmt.Print("*********************************************\n")
-	fmt.Print("FindByID Repository\n")
+	fmt.Print("MongoDBHandler FindByID\n")
 	fmt.Print("*********************************************\n")
 	var user domain.User
 	// err := c.DB.First(&user, id).Error
@@ -167,7 +171,7 @@ func (m *MongoDBHandler) FindByID(ctx context.Context, id uint) (domain.User, er
 
 func (m *MongoDBHandler) Save(ctx context.Context, user domain.User) (domain.User, error) {
 	fmt.Print("*********************************************\n")
-	fmt.Print("Save Repository\n")
+	fmt.Print("MongoDBHandler Save\n")
 	fmt.Print("*********************************************\n")
 	// err := c.DB.Save(&user).Error
 
@@ -176,7 +180,7 @@ func (m *MongoDBHandler) Save(ctx context.Context, user domain.User) (domain.Use
 
 func (m *MongoDBHandler) Delete(ctx context.Context, user domain.User) error {
 	fmt.Print("*********************************************\n")
-	fmt.Print("Delete Repository\n")
+	fmt.Print("MongoDBHandler Delete\n")
 	fmt.Print("*********************************************\n")
 	// err := c.DB.Delete(&user).Error
 

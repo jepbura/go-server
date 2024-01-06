@@ -3,11 +3,11 @@ package constant
 type key string
 
 const (
-	Session   key = "session"
-	Port      key = "8778"
-	DB        key = "apiServer"
-	COL       key = "bookInfo"
-	MONGO_URL key = "mongodb://127.0.0.1:27017"
-	DBHost    key = "127.0.0.1"
-	DBPort    key = "27017"
+	Environment key = "local"
+	ServerHost  key = "127.0.0.1"
+	ServerPort  key = "8778"
+	DB_NAME     key = "GoServer"
+	DB_USER_COL key = "UsersInfo"
+	DBHost      key = "127.0.0.1"
+	DBPort      key = "27017"
 )

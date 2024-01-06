@@ -12,6 +12,7 @@ import (
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/jepbura/go-server/pkg/config"
+	"github.com/jepbura/go-server/pkg/constant"
 	"github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
 	"github.com/jepbura/go-server/pkg/infrastructure/graph"
 	services "github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
@@ -23,6 +24,7 @@ import (
 type ServerHTTP struct {
 	Environment    string `name:"env"`
 	Port           string `name:"port"`
+	Host           string `name:"host"`
 	GraphiQLEnable bool   `name:"graphiql_enable"`
 	Logger         *zap.Logger
 	Server         *http.Server
@@ -39,19 +41,28 @@ func NewServerHTTP(cnf config.Env, Logger *zap.Logger, Usecase services.UserUseC
 	var man *autocert.Manager
 	engine := gin.New()
 
+	ServerAddress := cnf.Host
+	ServerPort := cnf.Port
+	Environment := cnf.Environment
+
+	ServerAddress = config.DefaultIfEmpty(ServerAddress, string(constant.ServerHost))
+	ServerPort = config.DefaultIfEmpty(ServerPort, string(constant.ServerPort))
+	Environment = config.DefaultIfEmpty(Environment, string(constant.Environment))
+
 	// zap.Logger integration with gin
 	engine.Use(ginzap.Ginzap(Logger, time.RFC3339, true))
 	engine.Use(ginzap.RecoveryWithZap(Logger, true))
 
 	server := &ServerHTTP{
-		Environment: cnf.Environment,
-		Port:        cnf.Port,
+		Environment: Environment,
+		Host:        ServerAddress,
+		Port:        ServerPort,
 		Logger:      Logger,
 		engine:      engine,
 		Usecase:     Usecase,
 	}
 
-	if cnf.Environment != "local" {
+	if Environment != "local" {
 		host := ""
 		man = &autocert.Manager{
 			Prompt: autocert.AcceptTOS,
@@ -67,9 +78,8 @@ func NewServerHTTP(cnf config.Env, Logger *zap.Logger, Usecase services.UserUseC
 		}
 		server.Manager = man
 	} else {
-		host := "localhost"
 		server.Server = &http.Server{
-			Addr:    host + ":" + cnf.Port,
+			Addr:    ServerAddress + ":" + ServerPort,
 			Handler: engine,
 		}
 	}

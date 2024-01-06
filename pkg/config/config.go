@@ -12,10 +12,6 @@ import (
 
 // Env is return results for constants
 type Env struct {
-	// Build Envirounment
-	BuildID   string `name:"build_id"`
-	Branch    string `name:"branch"`
-	CommitSHA string `name:"commit_sha"`
 	// Server Environment
 	Environment string `name:"env"`
 	// Server variables
@@ -23,24 +19,17 @@ type Env struct {
 	Port string `name:"port"`
 	// GraphiQLEnable variables
 	GraphiQLEnable bool `name:"graphiql_enable"`
-	// Log path variables
-	LogPath string `name:"log_path"`
-	// Secret
-	TokenPassword string `name:"token_password"`
 	// MongoDB
 	MongoURL      string `name:"mongo_url"`
 	MongoDatabase string `name:"mongo_database"`
-	// PostgresQL
-	PostgresQLURL string `name:"postgresql_url"`
-
-	AppENV                 string `name:"app_env"`
-	ServerAddress          string `name:"server_address"`
-	ContextTimeout         string `name:"context_timeout"`
-	DBHost                 string `name:"db_host"`
-	DBPort                 string `name:"db_port"`
-	DBUser                 string `name:"db_user"`
-	DBPass                 string `name:"db_pass"`
-	DBName                 string `name:"db_name"`
+	DBHost        string `name:"db_host"`
+	DBPort        string `name:"db_port"`
+	DBUser        string `name:"db_user"`
+	DBPass        string `name:"db_pass"`
+	DBName        string `name:"db_name"`
+	// MongoDB collection
+	DBUserCOL string `name:"db_user_col"`
+	// JWT
 	AccessTokenExpiryHour  string `name:"access_token_expiry_hour"`
 	RefreshTokenExpiryHour string `name:"refresh_token_expiry_hour"`
 	AccessTokenSecret      string `name:"access_token_secret"`
@@ -55,26 +44,16 @@ func EnvInit() (Env, error) {
 	err := loadFile("../.env")
 
 	return Env{
-		BuildID:                os.Getenv("BUILD_ID"),
-		Branch:                 os.Getenv("BRANCH"),
-		CommitSHA:              os.Getenv("COMMIT_SHA"),
 		Environment:            os.Getenv("ENV"),
 		Host:                   os.Getenv("HOST"),
 		Port:                   os.Getenv("PORT"),
-		GraphiQLEnable:         os.Getenv("GRAPIHQL_ENABLE") == "true",
-		LogPath:                os.Getenv("LOG_PATH"),
-		TokenPassword:          os.Getenv("TOKEN_PASSWORD"),
-		MongoURL:               os.Getenv("MONGO_URL"),
-		MongoDatabase:          os.Getenv("MONGO_DATABASE"),
-		PostgresQLURL:          os.Getenv("POSTGRESQL_URL"),
-		AppENV:                 os.Getenv("APP_ENV"),
-		ServerAddress:          os.Getenv("SERVER_ADDRESS"),
-		ContextTimeout:         os.Getenv("CONTEXT_TIMEOUT"),
+		GraphiQLEnable:         os.Getenv("GRAPHIQL_ENABLE") == "true",
 		DBHost:                 os.Getenv("DB_HOST"),
 		DBPort:                 os.Getenv("DB_PORT"),
 		DBUser:                 os.Getenv("DB_USER"),
 		DBPass:                 os.Getenv("DB_PASS"),
 		DBName:                 os.Getenv("DB_NAME"),
+		DBUserCOL:              os.Getenv("DB_USER_COL"),
 		AccessTokenExpiryHour:  os.Getenv("ACCESS_TOKEN_EXPIRY_HOUR"),
 		RefreshTokenExpiryHour: os.Getenv("REFRESH_TOKEN_EXPIRY_HOUR"),
 		AccessTokenSecret:      os.Getenv("ACCESS_TOKEN_SECRET"),

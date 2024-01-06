@@ -2,18 +2,6 @@
 
 package model
 
-type Book struct {
-	ID     string `json:"id"`
-	Title  string `json:"title"`
-	Author *User  `json:"author"`
-}
-
-type NewBook struct {
-	Title  string `json:"title"`
-	UserID string `json:"userId"`
-	Name   string `json:"name"`
-}
-
 type NewUser struct {
 	Name        string `json:"name"`
 	Surname     string `json:"surname"`

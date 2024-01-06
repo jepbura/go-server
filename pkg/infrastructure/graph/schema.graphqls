@@ -1,7 +1,7 @@
 # Query order
 type Query {
   users: [User!]!
-  books: [Book!]!
+  user(id: ID!): User!
 }
 
 type User {
@@ -22,17 +22,11 @@ type User {
   settings: String!
 }
 
-type Book {
-  id: ID!
-  title: String!
-  author: User!
-}
-
 # Mutation order
 
 type Mutation {
   createUser(input: NewUser!): User!
-  createBook(input: NewBook!): Book!
+  deleteUser(id: ID!): User!
 }
 
 input NewUser {
@@ -50,10 +44,4 @@ input NewUser {
   role: String!
   photoURL: String!
   settings: String!
-}
-
-input NewBook {
-  title: String!
-  userId: String!
-  name: String!
 }

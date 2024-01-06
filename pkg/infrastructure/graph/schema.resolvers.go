@@ -16,13 +16,14 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
 }
 
-// CreateBook is the resolver for the createBook field.
-func (r *mutationResolver) CreateBook(ctx context.Context, input model.NewBook) (*model.Book, error) {
-	panic(fmt.Errorf("not implemented: CreateBook - createBook"))
+// DeleteUser is the resolver for the deleteUser field.
+func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: DeleteUser - deleteUser"))
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	// panic(fmt.Errorf("not implemented: Users - users"))
 	// panic(fmt.Errorf("not implemented: Users - users"))
 	fmt.Print("*********************************************\n")
 	fmt.Print("Resolvers Users\n")
@@ -41,9 +42,9 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	return users, nil
 }
 
-// Books is the resolver for the books field.
-func (r *queryResolver) Books(ctx context.Context) ([]*model.Book, error) {
-	panic(fmt.Errorf("not implemented: Books - books"))
+// User is the resolver for the user field.
+func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: User - user"))
 }
 
 // Mutation returns MutationResolver implementation.

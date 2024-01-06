@@ -6,9 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.41
 	github.com/gin-contrib/zap v0.2.0
 	github.com/gin-gonic/gin v1.9.1
-	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/wire v0.5.0
-	github.com/jinzhu/copier v0.4.0
 	github.com/vektah/gqlparser/v2 v2.5.10
 	go.mongodb.org/mongo-driver v1.13.1
 	go.uber.org/zap v1.25.0

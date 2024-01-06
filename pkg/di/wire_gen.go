@@ -8,7 +8,6 @@ package di
 
 import (
 	"github.com/google/wire"
-	"github.com/jepbura/go-server/pkg/api/handler"
 	"github.com/jepbura/go-server/pkg/config"
 	"github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
 	"github.com/jepbura/go-server/pkg/infrastructure/graph"
@@ -66,5 +65,3 @@ var dbSet = wire.NewSet(mongo.NewMongoDatabase, wire.Struct(new(mongo.MongoDBHan
 var NewUserRepository = wire.NewSet(repository.NewUserRepository)
 
 var usecaseSet = wire.NewSet(usecase.NewUserUseCase)
-
-var handlerSet = wire.NewSet(handler.NewUserHandler)

@@ -49,6 +49,7 @@ func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser) (doma
 	fmt.Print("*********************************************\n")
 	fmt.Print("MongoDBHandler Save\n")
 	fmt.Print("*********************************************\n")
+
 	user := domain.User{
 		ID:          fmt.Sprintf("T%d", rand.Int()),
 		Name:        "John",

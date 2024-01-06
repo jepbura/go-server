@@ -32,6 +32,7 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 		return nil, err
 	}
 	mongoDBHandler := mongo.MongoDBHandler{
+		Env:    cnf,
 		Client: client,
 	}
 	userRepository := repository.NewUserRepository(client, mongoDBHandler)

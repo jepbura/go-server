@@ -15,6 +15,7 @@ import (
 
 // MongoDBHandler is connection provider to access to global mongodb client
 type MongoDBHandler struct {
+	Env    config.Env
 	Client *mongo.Client
 }
 

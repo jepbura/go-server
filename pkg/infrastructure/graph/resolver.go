@@ -7,5 +7,5 @@ package graph
 import services "github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
 
 type Resolver struct {
-	Usecase services.UserUseCase
+	Usecase services.UseCaseInterface
 }

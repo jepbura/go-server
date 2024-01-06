@@ -6,7 +6,7 @@ import (
 	"github.com/jepbura/go-server/pkg/domain"
 )
 
-type UserUseCase interface {
+type UseCaseInterface interface {
 	FindAll(ctx context.Context) ([]*domain.User, error)
 	FindByID(ctx context.Context, id uint) (domain.User, error)
 	Save(ctx context.Context, newUser domain.NewUser) (domain.User, error)

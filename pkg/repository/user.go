@@ -15,7 +15,7 @@ type UserDatabase struct {
 	DBHandler mongodb.MongoDBHandler
 }
 
-func NewUserRepository(DB *mongo.Client, DBHandler mongodb.MongoDBHandler) repository_interface.UserRepository {
+func NewUserRepository(DB *mongo.Client, DBHandler mongodb.MongoDBHandler) repository_interface.RepositoryInterface {
 	fmt.Print("*********************************************\n")
 	fmt.Print("NewUserRepository\n")
 	fmt.Print("*********************************************\n")

@@ -31,10 +31,10 @@ type ServerHTTP struct {
 	Manager        *autocert.Manager
 	engine         *gin.Engine
 	MongoDB        *mongo.MongoDBHandler
-	Usecase        services.UserUseCase
+	Usecase        services.UseCaseInterface
 }
 
-func NewServerHTTP(cnf config.Env, Logger *zap.Logger, Usecase services.UserUseCase) *ServerHTTP {
+func NewServerHTTP(cnf config.Env, Logger *zap.Logger, Usecase services.UseCaseInterface) *ServerHTTP {
 	fmt.Print("*********************************************\n")
 	fmt.Print("RunServer\n")
 	fmt.Print("*********************************************\n")
@@ -117,7 +117,7 @@ func (s *ServerHTTP) StartGraphQLServer() {
 }
 
 // GrqphQL is defining as the GraphQL handler
-func GrqphQL(Usecase services.UserUseCase) gin.HandlerFunc {
+func GrqphQL(Usecase services.UseCaseInterface) gin.HandlerFunc {
 	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
 		Usecase: Usecase,
 	}}))

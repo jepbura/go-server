@@ -12,7 +12,7 @@ import (
 	"github.com/jepbura/go-server/pkg/infrastructure/graph"
 	"github.com/jepbura/go-server/pkg/infrastructure/logging"
 	repository "github.com/jepbura/go-server/pkg/repository"
-	usecase "github.com/jepbura/go-server/pkg/usecase"
+	usecase "github.com/jepbura/go-server/pkg/usecase/user_usecase"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

@@ -7,5 +7,5 @@ import "github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	Usecase usecase_interfaces.UseCasesInterface
+	Usecase *usecase_interfaces.UseCasesInterface
 }

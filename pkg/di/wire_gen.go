@@ -38,16 +38,13 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 	}
 	repositoryInterface := repository.NewUserRepository(client, mongoDBHandler)
 	userUsecaseInterface := usecase.NewUserUseCase(repositoryInterface)
-	useCasesInterface := usecase_interfaces.UseCasesInterface{
+	useCasesInterface := &usecase_interfaces.UseCasesInterface{
 		UserUsecaseInterface: userUsecaseInterface,
 	}
-	resolver := graph.Resolver{
+	resolver := &graph.Resolver{
 		Usecase: useCasesInterface,
 	}
-	usecase_interfacesUseCasesInterface := &usecase_interfaces.UseCasesInterface{
-		UserUsecaseInterface: userUsecaseInterface,
-	}
-	serverHTTP := server.NewServerHTTP(cnf, logger, usecase_interfacesUseCasesInterface)
+	serverHTTP := server.NewServerHTTP(cnf, logger, useCasesInterface)
 	app := &App{
 		Resolver: resolver,
 		Client:   client,
@@ -59,7 +56,7 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 // wire.go:
 
 type App struct {
-	Resolver graph.Resolver
+	Resolver *graph.Resolver
 	Client   *mongo2.Client
 	// MongoDBHandler *mongodb.MongoDBHandler
 	// Repo        *repository.UserDatabase

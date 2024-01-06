@@ -18,7 +18,7 @@ import (
 )
 
 type App struct {
-	Resolver graph.Resolver
+	Resolver *graph.Resolver
 	Client   *mongo.Client
 	// MongoDBHandler *mongodb.MongoDBHandler
 	// Repo        *repository.UserDatabase

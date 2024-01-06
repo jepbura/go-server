@@ -21,8 +21,6 @@ import (
 
 // Injectors from wire.go:
 
-// func InitializeAPP(cnf config.Env) (*http.ServerHTTP, error) {
-// func InitializeAPP(cnf config.Env) (*mongodb.MongoDBHandler, error) {
 func InitializeAPP(cnf config.Env) (*App, error) {
 	logger, err := logging.LoggerInit(cnf)
 	if err != nil {
@@ -36,19 +34,24 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 		Env:    cnf,
 		Client: client,
 	}
-	repositoryInterface := repository.NewUserRepository(client, mongoDBHandler)
-	userUsecaseInterface := usecase.NewUserUseCase(repositoryInterface)
+	repositoryInterface := userRepository.NewUserRepository(client, mongoDBHandler)
+	userUsecaseInterface := userUsecase.NewUserUseCase(repositoryInterface)
 	useCasesInterface := &usecase_interfaces.UseCasesInterface{
 		UserUsecaseInterface: userUsecaseInterface,
 	}
 	resolver := &graph.Resolver{
 		Usecase: useCasesInterface,
 	}
+	mongoMongoDBHandler := &mongo.MongoDBHandler{
+		Env:    cnf,
+		Client: client,
+	}
 	serverHTTP := server.NewServerHTTP(cnf, logger, useCasesInterface)
 	app := &App{
-		Resolver: resolver,
-		Client:   client,
-		Http:     serverHTTP,
+		Resolver:       resolver,
+		Client:         client,
+		MongoDBHandler: mongoMongoDBHandler,
+		Http:           serverHTTP,
 	}
 	return app, nil
 }
@@ -56,9 +59,9 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 // wire.go:
 
 type App struct {
-	Resolver *graph.Resolver
-	Client   *mongo2.Client
-	// MongoDBHandler *mongodb.MongoDBHandler
+	Resolver       *graph.Resolver
+	Client         *mongo2.Client
+	MongoDBHandler *mongo.MongoDBHandler
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
 	// UserHandler *handler.UserHandler
@@ -68,6 +71,6 @@ type App struct {
 
 var dbSet = wire.NewSet(mongo.NewMongoDatabase, wire.Struct(new(mongo.MongoDBHandler), "*"), wire.Bind(new(mongo.MongoDbProvider), new(*mongo.MongoDBHandler)))
 
-var NewUserRepository = wire.NewSet(repository.NewUserRepository)
+var NewUserRepository = wire.NewSet(userRepository.NewUserRepository)
 
-var usecaseSet = wire.NewSet(usecase.NewUserUseCase, wire.Struct(new(usecase_interfaces.UseCasesInterface), "*"))
+var usecaseSet = wire.NewSet(userUsecase.NewUserUseCase, wire.Struct(new(usecase_interfaces.UseCasesInterface), "*"))

@@ -11,16 +11,16 @@ import (
 	mongodb "github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
 	"github.com/jepbura/go-server/pkg/infrastructure/graph"
 	"github.com/jepbura/go-server/pkg/infrastructure/logging"
-	repository "github.com/jepbura/go-server/pkg/repository/user_repository"
+	userRepository "github.com/jepbura/go-server/pkg/repository/user_repository"
 	"github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
 	userUsecase "github.com/jepbura/go-server/pkg/usecase/user_usecase"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type App struct {
-	Resolver *graph.Resolver
-	Client   *mongo.Client
-	// MongoDBHandler *mongodb.MongoDBHandler
+	Resolver       *graph.Resolver
+	Client         *mongo.Client
+	MongoDBHandler *mongodb.MongoDBHandler
 	// Repo        *repository.UserDatabase
 	// Usecase     *usecase.UserUseCase
 	// UserHandler *handler.UserHandler
@@ -36,7 +36,7 @@ var dbSet = wire.NewSet(
 )
 
 var NewUserRepository = wire.NewSet(
-	repository.NewUserRepository,
+	userRepository.NewUserRepository,
 	// wire.Struct(new(repository.UserDatabase), "*"),
 	// wire.Bind(new(repositoryProvider.UserRepository), new(*repository.UserDatabase)),
 )
@@ -47,8 +47,6 @@ var usecaseSet = wire.NewSet(
 	wire.Struct(new(usecase_interfaces.UseCasesInterface), "*"),
 )
 
-// func InitializeAPP(cnf config.Env) (*http.ServerHTTP, error) {
-// func InitializeAPP(cnf config.Env) (*mongodb.MongoDBHandler, error) {
 func InitializeAPP(cnf config.Env) (*App, error) {
 	panic(wire.Build(
 		logging.LoggerInit,
@@ -82,7 +80,5 @@ func InitializeAPP(cnf config.Env) (*App, error) {
 	// userController := handler.NewUserHandler(userUsecase)
 	// myHttp := http.NewServerHTTP(userController)
 
-	// return &http.ServerHTTP{}, nil
-	// return &mongodb.MongoDBHandler{}, nil
 	return &App{}, nil
 }

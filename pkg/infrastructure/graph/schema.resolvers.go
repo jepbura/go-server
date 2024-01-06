@@ -64,7 +64,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 		return nil, fmt.Errorf("not implemented: User - user")
 	}
 
-	user, err := r.Usecase.UserUsecaseInterface.Delete(ctx, id)
+	user, err := r.Usecase.UserUsecaseInterface.FindByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}

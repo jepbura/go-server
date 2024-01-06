@@ -35,8 +35,8 @@ func (c *UserDatabase) FindByID(ctx context.Context, id uint) (domain.User, erro
 	return user, err
 }
 
-func (c *UserDatabase) Save(ctx context.Context, user domain.User) (domain.User, error) {
-	user, err := c.DBHandler.Save(ctx, user)
+func (c *UserDatabase) Save(ctx context.Context, newUser domain.NewUser) (domain.User, error) {
+	user, err := c.DBHandler.Save(ctx, newUser)
 	return user, err
 }
 

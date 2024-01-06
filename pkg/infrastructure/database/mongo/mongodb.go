@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jepbura/go-server/pkg/config"
 	"github.com/jepbura/go-server/pkg/constant"
+	"github.com/jepbura/go-server/pkg/domain"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
@@ -125,4 +126,59 @@ func ForContext(ctx context.Context) *mongo.Client {
 		panic("ctx passing is not contain mongodb client")
 	}
 	return client
+}
+
+func (m *MongoDBHandler) FindAll(ctx context.Context) ([]*domain.User, error) {
+	fmt.Print("*********************************************\n")
+	fmt.Print("MongoDBHandler Repository\n")
+	fmt.Print("*********************************************\n")
+	user := &domain.User{
+		ID:          "1",
+		Name:        "John",
+		Surname:     "Doe",
+		UserName:    "john_doe",
+		Password:    "password123",
+		NationalID:  "123456789",
+		BirthYear:   "1990",
+		PhoneNumber: "1234567890",
+		FatherName:  "Doe Sr.",
+		City:        "New York",
+		Email:       "john.doe@example.com",
+		Gender:      "Male",
+		Role:        "User",
+		PhotoURL:    "https://example.com/profile.jpg",
+		Settings:    "default",
+	}
+
+	users := []*domain.User{user}
+
+	return users, nil
+}
+
+func (m *MongoDBHandler) FindByID(ctx context.Context, id uint) (domain.User, error) {
+	fmt.Print("*********************************************\n")
+	fmt.Print("FindByID Repository\n")
+	fmt.Print("*********************************************\n")
+	var user domain.User
+	// err := c.DB.First(&user, id).Error
+
+	return user, nil
+}
+
+func (m *MongoDBHandler) Save(ctx context.Context, user domain.User) (domain.User, error) {
+	fmt.Print("*********************************************\n")
+	fmt.Print("Save Repository\n")
+	fmt.Print("*********************************************\n")
+	// err := c.DB.Save(&user).Error
+
+	return user, nil
+}
+
+func (m *MongoDBHandler) Delete(ctx context.Context, user domain.User) error {
+	fmt.Print("*********************************************\n")
+	fmt.Print("Delete Repository\n")
+	fmt.Print("*********************************************\n")
+	// err := c.DB.Delete(&user).Error
+
+	return nil
 }

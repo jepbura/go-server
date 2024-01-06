@@ -7,8 +7,8 @@ import (
 )
 
 type UserUseCase interface {
-	FindAll(ctx context.Context) ([]domain.Users, error)
-	FindByID(ctx context.Context, id uint) (domain.Users, error)
-	Save(ctx context.Context, user domain.Users) (domain.Users, error)
-	Delete(ctx context.Context, user domain.Users) error
+	FindAll(ctx context.Context) ([]*domain.User, error)
+	FindByID(ctx context.Context, id uint) (domain.User, error)
+	Save(ctx context.Context, user domain.User) (domain.User, error)
+	Delete(ctx context.Context, user domain.User) error
 }

@@ -14,6 +14,7 @@ import (
 	"github.com/jepbura/go-server/pkg/config"
 	"github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
 	"github.com/jepbura/go-server/pkg/infrastructure/graph"
+	services "github.com/jepbura/go-server/pkg/usecase/usecase_interfaces"
 	"golang.org/x/crypto/acme/autocert"
 
 	"go.uber.org/zap"
@@ -28,9 +29,10 @@ type ServerHTTP struct {
 	Manager        *autocert.Manager
 	engine         *gin.Engine
 	MongoDB        *mongo.MongoDBHandler
+	Usecase        services.UserUseCase
 }
 
-func NewServerHTTP(cnf config.Env, Logger *zap.Logger) *ServerHTTP {
+func NewServerHTTP(cnf config.Env, Logger *zap.Logger, Usecase services.UserUseCase) *ServerHTTP {
 	fmt.Print("*********************************************\n")
 	fmt.Print("RunServer\n")
 	fmt.Print("*********************************************\n")
@@ -46,6 +48,7 @@ func NewServerHTTP(cnf config.Env, Logger *zap.Logger) *ServerHTTP {
 		Port:        cnf.Port,
 		Logger:      Logger,
 		engine:      engine,
+		Usecase:     Usecase,
 	}
 
 	if cnf.Environment != "local" {
@@ -97,15 +100,17 @@ func (s *ServerHTTP) StartGraphQLServer() {
 	s.engine.Use(s.MongoDB.Connect()).
 		Use(Middleware()).
 		// Use(m.auth.Middleware()).
-		POST("/query", GrqphQL())
+		POST("/query", GrqphQL(s.Usecase))
 	if !s.GraphiQLEnable {
 		s.engine.GET("/", GraphiQL())
 	}
 }
 
 // GrqphQL is defining as the GraphQL handler
-func GrqphQL() gin.HandlerFunc {
-	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+func GrqphQL(Usecase services.UserUseCase) gin.HandlerFunc {
+	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
+		Usecase: Usecase,
+	}}))
 	return func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	}

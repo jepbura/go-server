@@ -84,7 +84,7 @@ func (cr *UserHandler) FindByID(c *gin.Context) {
 }
 
 func (cr *UserHandler) Save(c *gin.Context) {
-	var user domain.Users
+	var user domain.User
 
 	if err := c.BindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
@@ -121,7 +121,7 @@ func (cr *UserHandler) Delete(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 	}
 
-	if user == (domain.Users{}) {
+	if user == (domain.User{}) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "User is not booking yet",
 		})

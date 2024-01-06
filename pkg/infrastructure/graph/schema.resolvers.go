@@ -23,7 +23,22 @@ func (r *mutationResolver) CreateBook(ctx context.Context, input model.NewBook) 
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	// panic(fmt.Errorf("not implemented: Users - users"))
+	fmt.Print("*********************************************\n")
+	fmt.Print("Resolvers Users\n")
+	fmt.Print("*********************************************\n")
+
+	// Check if Usecase is nil
+	if r.Usecase == nil {
+		return nil, fmt.Errorf("not implemented: Users - users")
+	}
+
+	users, err := r.Usecase.FindAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
 
 // Books is the resolver for the books field.

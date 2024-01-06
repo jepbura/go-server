@@ -22,23 +22,23 @@ func NewUserUseCase(repo repository_interface.UserRepository) usecase_interfaces
 	}
 }
 
-func (c *UserUseCase) FindAll(ctx context.Context) ([]domain.Users, error) {
+func (c *UserUseCase) FindAll(ctx context.Context) ([]*domain.User, error) {
 	users, err := c.userRepo.FindAll(ctx)
 	return users, err
 }
 
-func (c *UserUseCase) FindByID(ctx context.Context, id uint) (domain.Users, error) {
+func (c *UserUseCase) FindByID(ctx context.Context, id uint) (domain.User, error) {
 	user, err := c.userRepo.FindByID(ctx, id)
 	return user, err
 }
 
-func (c *UserUseCase) Save(ctx context.Context, user domain.Users) (domain.Users, error) {
+func (c *UserUseCase) Save(ctx context.Context, user domain.User) (domain.User, error) {
 	user, err := c.userRepo.Save(ctx, user)
 
 	return user, err
 }
 
-func (c *UserUseCase) Delete(ctx context.Context, user domain.Users) error {
+func (c *UserUseCase) Delete(ctx context.Context, user domain.User) error {
 	err := c.userRepo.Delete(ctx, user)
 
 	return err

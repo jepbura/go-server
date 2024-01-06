@@ -11,7 +11,7 @@ import (
 	mongodb "github.com/jepbura/go-server/pkg/infrastructure/database/mongo"
 	"github.com/jepbura/go-server/pkg/infrastructure/graph"
 	"github.com/jepbura/go-server/pkg/infrastructure/logging"
-	repository "github.com/jepbura/go-server/pkg/repository"
+	repository "github.com/jepbura/go-server/pkg/repository/user_repository"
 	usecase "github.com/jepbura/go-server/pkg/usecase/user_usecase"
 	"go.mongodb.org/mongo-driver/mongo"
 )

@@ -3,9 +3,9 @@ package mongo
 import (
 	"context"
 	"fmt"
-	"math/rand"
 
 	"github.com/jepbura/go-server/pkg/domain"
+	"github.com/jinzhu/copier"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -32,24 +32,21 @@ func (m *MongoDBHandler) FindAll(ctx context.Context) ([]*domain.User, error) {
 	// Iterate through the results and decode each user
 	var users []*domain.User
 	for result.Next(ctx) {
-		var user map[string]interface{}
-		var user2 domain.User
+		var user domain.UserWithId
+
 		if err := result.Decode(&user); err != nil {
 			return nil, err
 		}
-		if err := result.Decode(&user2); err != nil {
-			return nil, err
-		}
 
-		// Convert the ID to a string
-		id := user["_id"].(primitive.ObjectID).Hex()
+		// Create a new variable of type domain.User
+		var userModel domain.User
 
-		// Create a new User object
-		newUser := domain.User{
-			ID: id,
-		}
-		user2.ID = newUser.ID
-		users = append(users, &user2)
+		copier.Copy(&userModel, &user)
+
+		// Convert the id from ObjectId to string
+		userModel.ID = user.ID.Hex()
+
+		users = append(users, &userModel)
 	}
 
 	return users, nil
@@ -94,7 +91,7 @@ func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser) (*dom
 	fmt.Print("*********************************************\n")
 
 	_user := &domain.User{
-		ID:          fmt.Sprintf("T%d", rand.Int()),
+		// ID:          fmt.Sprintf("T%d", rand.Int()),
 		Name:        "John",
 		Surname:     "Doe",
 		UserName:    "john_doe",
@@ -131,23 +128,23 @@ func (m *MongoDBHandler) Delete(ctx context.Context, id string) (string, error) 
 	fmt.Print("*********************************************\n")
 	fmt.Print("MongoDBHandler Delete\n")
 	fmt.Print("*********************************************\n")
-	deleteUserId := domain.User{
-		ID:          fmt.Sprintf("T%d", rand.Int()),
-		Name:        "John",
-		Surname:     "Doe",
-		UserName:    "john_doe",
-		Password:    "password123",
-		NationalID:  "123456789",
-		BirthYear:   "1990",
-		PhoneNumber: "1234567890",
-		FatherName:  "Doe Sr.",
-		City:        "New York",
-		Email:       "john.doe@example.com",
-		Gender:      "Male",
-		Role:        "User",
-		PhotoURL:    "https://example.com/profile.jpg",
-		Settings:    "default",
-	}
+	// deleteUserId := domain.User{
+	// 	// ID:          fmt.Sprintf("T%d", rand.Int()),
+	// 	Name:        "John",
+	// 	Surname:     "Doe",
+	// 	UserName:    "john_doe",
+	// 	Password:    "password123",
+	// 	NationalID:  "123456789",
+	// 	BirthYear:   "1990",
+	// 	PhoneNumber: "1234567890",
+	// 	FatherName:  "Doe Sr.",
+	// 	City:        "New York",
+	// 	Email:       "john.doe@example.com",
+	// 	Gender:      "Male",
+	// 	Role:        "User",
+	// 	PhotoURL:    "https://example.com/profile.jpg",
+	// 	Settings:    "default",
+	// }
 
-	return deleteUserId.ID, nil
+	return "deleteUserId.ID", nil
 }

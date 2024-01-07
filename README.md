@@ -1,4 +1,6 @@
-# Go-Server: Clean Architecture with Wire + Gin + GraphQL(gqlgen) + MongoDB
+# Go-Server:
+
+## Clean Architecture with Wire + Gin + GraphQL(gqlgen) + MongoDB
 
 This project implements a server in Go using Clean Architecture principles for maintainable and scalable code. It leverages Gin for the HTTP web framework, gqlgen for GraphQL server implementation, Wire for dependency injection, and MongoDB as the database. JSON Web Tokens (JWT) are used for secure authentication.
 
@@ -14,10 +16,11 @@ Clean Architecture is designed to separate concerns, making the system easy to m
 - **[gqlgen](https://github.com/99designs/gqlgen):** A Go library for building GraphQL servers without any fuss.
 - **[MongoDB](https://github.com/mongodb/mongo-go-driver):** A NoSQL database that offers high performance, high availability, and easy scalability.
 - **[Wire](https://github.com/google/wire):** Wire is an automatic dependency injection tool for Go, which simplifies the process of wiring application components together.
-- **[JWT](https://github.com/dgrijalva/jwt-go):** JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims securely between two parties.
+- **[JWT](https://github.com/golang-jwt/jwt):** JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims securely between two parties.
 
 ## Project Structure
 
+```
 .
 ├── cmd
 └── pkg
@@ -38,6 +41,8 @@ Clean Architecture is designed to separate concerns, making the system easy to m
 └── usecase
 ├── usecase_interfaces
 └── user_usecase
+
+```
 
 ## Prerequisites
 
@@ -90,6 +95,8 @@ To run the project, follow these steps:
 - [ ] Add JWT
 - [ ] Add Gorilla WebSocket
 - [ ] Add Redis
+- [ ] Add Docker
+- [ ] Add Kubernetes
 
 ## Acknowledgements
 

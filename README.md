@@ -29,15 +29,15 @@ Clean Architecture is designed to separate concerns, making the system easy to m
 ├── di
 ├── domain
 ├── infrastructure
-│ ├── database
-│ │ └── mongo
-│ ├── graph
-│ │ └── model
-│ ├── logging
-│ └── server
+│   ├── database
+│   │ └── mongo
+│   ├── graph
+│   │ └── model
+│   ├── logging
+│   └── server
 ├── repository
-│ ├── repository_interface
-│ └── user_repository
+│   ├── repository_interface
+│   └── user_repository
 └── usecase
 ├── usecase_interfaces
 └── user_usecase

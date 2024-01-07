@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (m *MongoDBHandler) FindAll(ctx context.Context) ([]*domain.User, error) {
+func (m *MongoDBHandler) FindAllUsers(ctx context.Context) ([]*domain.User, error) {
 	fmt.Print("*********************************************\n")
 	fmt.Print("MongoDBHandler FindAll\n")
 	fmt.Print("*********************************************\n")
@@ -52,7 +52,7 @@ func (m *MongoDBHandler) FindAll(ctx context.Context) ([]*domain.User, error) {
 	return users, nil
 }
 
-func (m *MongoDBHandler) FindByID(ctx context.Context, id string) (*domain.User, error) {
+func (m *MongoDBHandler) FindUserByID(ctx context.Context, id string) (*domain.User, error) {
 	fmt.Print("*********************************************\n")
 	fmt.Print("MongoDBHandler FindByID\n")
 	fmt.Print("*********************************************\n")
@@ -91,7 +91,7 @@ func (m *MongoDBHandler) FindByID(ctx context.Context, id string) (*domain.User,
 	return &userModel, nil
 }
 
-func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser) (*domain.User, error) {
+func (m *MongoDBHandler) SaveUser(ctx context.Context, newUser domain.NewUser) (*domain.User, error) {
 	fmt.Print("*********************************************\n")
 	fmt.Print("MongoDBHandler Save\n")
 	fmt.Print("*********************************************\n")
@@ -137,7 +137,7 @@ func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser) (*dom
 	}
 }
 
-func (m *MongoDBHandler) Delete(ctx context.Context, id string) (string, error) {
+func (m *MongoDBHandler) DeleteUser(ctx context.Context, id string) (string, error) {
 	fmt.Print("*********************************************\n")
 	fmt.Print("MongoDBHandler Delete\n")
 	fmt.Print("*********************************************\n")

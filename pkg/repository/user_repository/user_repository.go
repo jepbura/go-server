@@ -21,22 +21,22 @@ func NewUserRepository(DBHandler *mongodb.MongoDBHandler) repository_interface.R
 	return &UserDatabase{DBHandler}
 }
 
-func (c *UserDatabase) FindAll(ctx context.Context) ([]*domain.User, error) {
-	users, err := c.DBHandler.FindAll(ctx)
+func (c *UserDatabase) FindAllUsers(ctx context.Context) ([]*domain.User, error) {
+	users, err := c.DBHandler.FindAllUsers(ctx)
 	return users, err
 }
 
-func (c *UserDatabase) FindByID(ctx context.Context, id string) (*domain.User, error) {
-	user, err := c.DBHandler.FindByID(ctx, id)
+func (c *UserDatabase) FindUserByID(ctx context.Context, id string) (*domain.User, error) {
+	user, err := c.DBHandler.FindUserByID(ctx, id)
 	return user, err
 }
 
-func (c *UserDatabase) Save(ctx context.Context, newUser domain.NewUser) (*domain.User, error) {
-	user, err := c.DBHandler.Save(ctx, newUser)
+func (c *UserDatabase) SaveUser(ctx context.Context, newUser domain.NewUser) (*domain.User, error) {
+	user, err := c.DBHandler.SaveUser(ctx, newUser)
 	return user, err
 }
 
-func (c *UserDatabase) Delete(ctx context.Context, id string) (string, error) {
-	deleteUserId, err := c.DBHandler.Delete(ctx, id)
+func (c *UserDatabase) DeleteUser(ctx context.Context, id string) (string, error) {
+	deleteUserId, err := c.DBHandler.DeleteUser(ctx, id)
 	return deleteUserId, err
 }

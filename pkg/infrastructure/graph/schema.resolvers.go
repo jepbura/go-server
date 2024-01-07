@@ -17,7 +17,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 		return nil, fmt.Errorf("not implemented: CreateUser - CreateUser")
 	}
 
-	user, err := r.Usecase.UserUsecaseInterface.Save(ctx, input)
+	user, err := r.Usecase.UserUsecaseInterface.SaveUser(ctx, input)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (string, e
 		return "", fmt.Errorf("not implemented: DeleteUser - DeleteUser")
 	}
 
-	deleteUserId, err := r.Usecase.UserUsecaseInterface.Delete(ctx, id)
+	deleteUserId, err := r.Usecase.UserUsecaseInterface.DeleteUser(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -45,7 +45,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 		return nil, fmt.Errorf("not implemented: Users - users")
 	}
 
-	users, err := r.Usecase.UserUsecaseInterface.FindAll(ctx)
+	users, err := r.Usecase.UserUsecaseInterface.FindAllUsers(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 		return nil, fmt.Errorf("not implemented: User - user")
 	}
 
-	user, err := r.Usecase.UserUsecaseInterface.FindByID(ctx, id)
+	user, err := r.Usecase.UserUsecaseInterface.FindUserByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}

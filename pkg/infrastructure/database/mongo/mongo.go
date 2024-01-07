@@ -13,8 +13,8 @@ type MongoDbInitProvider interface {
 	Connect() gin.HandlerFunc
 	WithContext(ctx context.Context) context.Context
 	Collection(ctx context.Context, col string) (*mongo.Collection, error)
-	FindAll(ctx context.Context) ([]*domain.User, error)
-	FindByID(ctx context.Context, id string) (*domain.User, error)
-	Save(ctx context.Context, newUser domain.NewUser) (*domain.User, error)
-	Delete(ctx context.Context, id string) (string, error)
+	FindAllUsers(ctx context.Context) ([]*domain.User, error)
+	FindUserByID(ctx context.Context, id string) (*domain.User, error)
+	SaveUser(ctx context.Context, newUser domain.NewUser) (*domain.User, error)
+	DeleteUser(ctx context.Context, id string) (string, error)
 }

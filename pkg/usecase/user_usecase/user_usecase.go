@@ -22,24 +22,24 @@ func NewUserUseCase(repo repository_interface.RepositoryInterface) usecase_inter
 	}
 }
 
-func (c *UserUseCase) FindAll(ctx context.Context) ([]*domain.User, error) {
-	users, err := c.userRepo.FindAll(ctx)
+func (c *UserUseCase) FindAllUsers(ctx context.Context) ([]*domain.User, error) {
+	users, err := c.userRepo.FindAllUsers(ctx)
 	return users, err
 }
 
-func (c *UserUseCase) FindByID(ctx context.Context, id string) (*domain.User, error) {
-	user, err := c.userRepo.FindByID(ctx, id)
+func (c *UserUseCase) FindUserByID(ctx context.Context, id string) (*domain.User, error) {
+	user, err := c.userRepo.FindUserByID(ctx, id)
 	return user, err
 }
 
-func (c *UserUseCase) Save(ctx context.Context, newUser domain.NewUser) (*domain.User, error) {
-	user, err := c.userRepo.Save(ctx, newUser)
+func (c *UserUseCase) SaveUser(ctx context.Context, newUser domain.NewUser) (*domain.User, error) {
+	user, err := c.userRepo.SaveUser(ctx, newUser)
 
 	return user, err
 }
 
-func (c *UserUseCase) Delete(ctx context.Context, id string) (string, error) {
-	deleteUserId, err := c.userRepo.Delete(ctx, id)
+func (c *UserUseCase) DeleteUser(ctx context.Context, id string) (string, error) {
+	deleteUserId, err := c.userRepo.DeleteUser(ctx, id)
 
 	return deleteUserId, err
 }

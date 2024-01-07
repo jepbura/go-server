@@ -8,6 +8,8 @@
   Clean Architecture + Wire + Gin + GraphQL(gqlgen) + MongoDB
 </h3>
 
+## Abstract
+
 This project implements a server in Go using Clean Architecture principles for maintainable and scalable code. It leverages Gin for the HTTP web framework, gqlgen for GraphQL server implementation, Wire for dependency injection, and MongoDB as the database. JSON Web Tokens (JWT) are used for secure authentication.
 
 ## Clean Architecture

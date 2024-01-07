@@ -117,7 +117,7 @@ func (m *MongoDBHandler) Delete(ctx context.Context, id string) (string, error) 
 	fmt.Print("*********************************************\n")
 	fmt.Print("MongoDBHandler Delete\n")
 	fmt.Print("*********************************************\n")
-	deleteUserId := &domain.User{
+	deleteUserId := domain.User{
 		ID:          fmt.Sprintf("T%d", rand.Int()),
 		Name:        "John",
 		Surname:     "Doe",

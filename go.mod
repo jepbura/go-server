@@ -3,7 +3,7 @@ module github.com/jepbura/go-server
 go 1.21.5
 
 require (
-	github.com/99designs/gqlgen v0.17.41
+	github.com/99designs/gqlgen v0.17.42
 	github.com/gin-contrib/zap v0.2.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/wire v0.5.0

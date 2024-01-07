@@ -22,7 +22,8 @@ func (m *MongoDBHandler) FindAll(ctx context.Context) ([]*domain.User, error) {
 	}
 
 	// Find all users
-	result, err := collection.Find(ctx, bson.D{})
+	filter := bson.M{"_id": bson.M{"$exists": true, "$ne": nil}}
+	result, err := collection.Find(ctx, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -31,11 +32,24 @@ func (m *MongoDBHandler) FindAll(ctx context.Context) ([]*domain.User, error) {
 	// Iterate through the results and decode each user
 	var users []*domain.User
 	for result.Next(ctx) {
-		var user domain.User
+		var user map[string]interface{}
+		var user2 domain.User
 		if err := result.Decode(&user); err != nil {
 			return nil, err
 		}
-		users = append(users, &user)
+		if err := result.Decode(&user2); err != nil {
+			return nil, err
+		}
+
+		// Convert the ID to a string
+		id := user["_id"].(primitive.ObjectID).Hex()
+
+		// Create a new User object
+		newUser := domain.User{
+			ID: id,
+		}
+		user2.ID = newUser.ID
+		users = append(users, &user2)
 	}
 
 	return users, nil

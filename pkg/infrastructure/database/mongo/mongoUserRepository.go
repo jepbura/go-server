@@ -76,13 +76,19 @@ func (m *MongoDBHandler) FindByID(ctx context.Context, id string) (*domain.User,
 	}
 
 	// Find one user based on the filter
-	var user domain.User
-	err = collection.FindOne(ctx, filter).Decode(&user)
+	var userWithId domain.UserWithId
+	err = collection.FindOne(ctx, filter).Decode(&userWithId)
 	if err != nil {
 		return nil, err
 	}
+	var userModel domain.User
 
-	return &user, nil
+	copier.Copy(&userModel, &userWithId)
+
+	// Convert the id from ObjectId to string
+	userModel.ID = userWithId.ID.Hex()
+
+	return &userModel, nil
 }
 
 func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser) (*domain.User, error) {
@@ -90,28 +96,10 @@ func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser) (*dom
 	fmt.Print("MongoDBHandler Save\n")
 	fmt.Print("*********************************************\n")
 
-	_user := &domain.User{
-		// ID:          fmt.Sprintf("T%d", rand.Int()),
-		Name:        "John",
-		Surname:     "Doe",
-		UserName:    "john_doe",
-		Password:    "password123",
-		NationalID:  "123456789",
-		BirthYear:   "1990",
-		PhoneNumber: "1234567890",
-		FatherName:  "Doe Sr.",
-		City:        "New York",
-		Email:       "john.doe@example.com",
-		Gender:      "Male",
-		Role:        "User",
-		PhotoURL:    "https://example.com/profile.jpg",
-		Settings:    "default",
-	}
-
 	// Get the collection
 	collection, err := m.Collection(ctx, m.Env.DBUserCOL)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	// Insert an user
@@ -119,32 +107,69 @@ func (m *MongoDBHandler) Save(ctx context.Context, newUser domain.NewUser) (*dom
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("result is: ", result)
+	fmt.Println("result is: ", result.InsertedID)
 
-	return _user, nil
+	if result.InsertedID != nil {
+		// Convert the InsertedID to primitive.ObjectID
+		insertedID, ok := result.InsertedID.(primitive.ObjectID)
+		if !ok {
+			return nil, fmt.Errorf("failed to convert InsertedID to primitive.ObjectID")
+		}
+
+		var userWithId domain.UserWithId
+
+		// Use the InsertedID as _id in the filter for FindOne
+		err = collection.FindOne(ctx, bson.M{"_id": insertedID}).Decode(&userWithId)
+		if err != nil {
+			return nil, err
+		}
+
+		var userModel domain.User
+
+		copier.Copy(&userModel, &userWithId)
+
+		// Convert the id from ObjectId to string
+		userModel.ID = userWithId.ID.Hex()
+
+		return &userModel, nil
+	} else {
+		return nil, fmt.Errorf("InsertOne did not return an InsertedID")
+	}
 }
 
 func (m *MongoDBHandler) Delete(ctx context.Context, id string) (string, error) {
 	fmt.Print("*********************************************\n")
 	fmt.Print("MongoDBHandler Delete\n")
 	fmt.Print("*********************************************\n")
-	// deleteUserId := domain.User{
-	// 	// ID:          fmt.Sprintf("T%d", rand.Int()),
-	// 	Name:        "John",
-	// 	Surname:     "Doe",
-	// 	UserName:    "john_doe",
-	// 	Password:    "password123",
-	// 	NationalID:  "123456789",
-	// 	BirthYear:   "1990",
-	// 	PhoneNumber: "1234567890",
-	// 	FatherName:  "Doe Sr.",
-	// 	City:        "New York",
-	// 	Email:       "john.doe@example.com",
-	// 	Gender:      "Male",
-	// 	Role:        "User",
-	// 	PhotoURL:    "https://example.com/profile.jpg",
-	// 	Settings:    "default",
-	// }
 
-	return "deleteUserId.ID", nil
+	// Get the collection
+	collection, err := m.Collection(ctx, m.Env.DBUserCOL)
+	if err != nil {
+		return "", nil
+	}
+
+	var objID primitive.ObjectID
+	var filter bson.M
+
+	// Check if id is a valid ObjectId
+	if oid, err := primitive.ObjectIDFromHex(id); err == nil {
+		objID = oid
+		filter = bson.M{"_id": objID}
+	} else {
+		// If id is not a valid ObjectId, use it directly
+		filter = bson.M{"_id": id}
+	}
+
+	// Insert an user
+	result, err := collection.DeleteOne(ctx, filter)
+	if err != nil {
+		return "", err
+	}
+
+	if result.DeletedCount == 1 {
+		return id, nil
+	} else {
+		return "", nil
+
+	}
 }

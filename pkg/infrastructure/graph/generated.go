@@ -78,7 +78,7 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	CreateUser(ctx context.Context, input model.NewUser) (*model.User, error)
-	DeleteUser(ctx context.Context, id string) (*model.User, error)
+	DeleteUser(ctx context.Context, id string) (string, error)
 }
 type QueryResolver interface {
 	Users(ctx context.Context) ([]*model.User, error)
@@ -588,9 +588,9 @@ func (ec *executionContext) _Mutation_deleteUser(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.User)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋjepburaᚋgoᚑserverᚋpkgᚋinfrastructureᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_deleteUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -600,39 +600,7 @@ func (ec *executionContext) fieldContext_Mutation_deleteUser(ctx context.Context
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_User_id(ctx, field)
-			case "name":
-				return ec.fieldContext_User_name(ctx, field)
-			case "surname":
-				return ec.fieldContext_User_surname(ctx, field)
-			case "userName":
-				return ec.fieldContext_User_userName(ctx, field)
-			case "password":
-				return ec.fieldContext_User_password(ctx, field)
-			case "nationalId":
-				return ec.fieldContext_User_nationalId(ctx, field)
-			case "birthYear":
-				return ec.fieldContext_User_birthYear(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_User_phoneNumber(ctx, field)
-			case "fatherName":
-				return ec.fieldContext_User_fatherName(ctx, field)
-			case "city":
-				return ec.fieldContext_User_city(ctx, field)
-			case "email":
-				return ec.fieldContext_User_email(ctx, field)
-			case "gender":
-				return ec.fieldContext_User_gender(ctx, field)
-			case "role":
-				return ec.fieldContext_User_role(ctx, field)
-			case "photoURL":
-				return ec.fieldContext_User_photoURL(ctx, field)
-			case "settings":
-				return ec.fieldContext_User_settings(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	defer func() {

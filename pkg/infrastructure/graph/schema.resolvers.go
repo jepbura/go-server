@@ -13,7 +13,6 @@ import (
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	// panic(fmt.Errorf("not implemented: CreateUser - createUser"))
 	if r.Usecase.UserUsecaseInterface == nil {
 		return nil, fmt.Errorf("not implemented: CreateUser - CreateUser")
 	}
@@ -27,24 +26,21 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 }
 
 // DeleteUser is the resolver for the deleteUser field.
-func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.User, error) {
-	// panic(fmt.Errorf("not implemented: DeleteUser - deleteUser"))
+func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (string, error) {
 	if r.Usecase.UserUsecaseInterface == nil {
-		return nil, fmt.Errorf("not implemented: DeleteUser - DeleteUser")
+		return "", fmt.Errorf("not implemented: DeleteUser - DeleteUser")
 	}
 
-	user, err := r.Usecase.UserUsecaseInterface.Delete(ctx, id)
+	deleteUserId, err := r.Usecase.UserUsecaseInterface.Delete(ctx, id)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	return user, nil
+	return deleteUserId, nil
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	// panic(fmt.Errorf("not implemented: Users - users"))
-
 	if r.Usecase.UserUsecaseInterface == nil {
 		return nil, fmt.Errorf("not implemented: Users - users")
 	}
@@ -59,7 +55,6 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	// panic(fmt.Errorf("not implemented: User - user"))
 	if r.Usecase.UserUsecaseInterface == nil {
 		return nil, fmt.Errorf("not implemented: User - user")
 	}

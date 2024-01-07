@@ -36,7 +36,7 @@ func (c *UserDatabase) Save(ctx context.Context, newUser domain.NewUser) (*domai
 	return user, err
 }
 
-func (c *UserDatabase) Delete(ctx context.Context, id string) (*domain.User, error) {
-	deleteUser, err := c.DBHandler.Delete(ctx, id)
-	return deleteUser, err
+func (c *UserDatabase) Delete(ctx context.Context, id string) (string, error) {
+	deleteUserId, err := c.DBHandler.Delete(ctx, id)
+	return deleteUserId, err
 }

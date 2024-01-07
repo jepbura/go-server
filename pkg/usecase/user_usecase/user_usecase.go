@@ -38,8 +38,8 @@ func (c *UserUseCase) Save(ctx context.Context, newUser domain.NewUser) (*domain
 	return user, err
 }
 
-func (c *UserUseCase) Delete(ctx context.Context, id string) (*domain.User, error) {
-	deleteUser, err := c.userRepo.Delete(ctx, id)
+func (c *UserUseCase) Delete(ctx context.Context, id string) (string, error) {
+	deleteUserId, err := c.userRepo.Delete(ctx, id)
 
-	return deleteUser, err
+	return deleteUserId, err
 }

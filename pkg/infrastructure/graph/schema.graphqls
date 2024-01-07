@@ -4,6 +4,15 @@ type Query {
   user(id: ID!): User!
 }
 
+# Mutation order
+
+type Mutation {
+  createUser(input: NewUser!): User!
+  deleteUser(id: ID!): ID!
+}
+
+# Schema Types
+
 type User {
   id: ID!
   name: String!
@@ -20,13 +29,6 @@ type User {
   role: String!
   photoURL: String!
   settings: String!
-}
-
-# Mutation order
-
-type Mutation {
-  createUser(input: NewUser!): User!
-  deleteUser(id: ID!): User!
 }
 
 input NewUser {

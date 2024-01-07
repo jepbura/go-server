@@ -30,9 +30,9 @@ Clean Architecture is designed to separate concerns, making the system easy to m
 ├── domain
 ├── infrastructure
 │   ├── database
-│   │ └── mongo
+│   │   └── mongo
 │   ├── graph
-│   │ └── model
+│   │   └── model
 │   ├── logging
 │   └── server
 ├── repository
